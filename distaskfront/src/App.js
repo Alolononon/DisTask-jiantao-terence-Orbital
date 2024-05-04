@@ -1,22 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <Navbar></Navbar>
+
+      <header>
+        <h1>
+          DisTask
+        </h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Welcome to DisTask, where u can manage ur task, chat with ur teamates,
+          and also plan with ur teamates. 
+          <br/>
+          This website is under maintenance, please 
+          do not mess around
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
