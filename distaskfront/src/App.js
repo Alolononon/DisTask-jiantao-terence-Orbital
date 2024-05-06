@@ -1,26 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import Navbar from './components/Navbar';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar></Navbar>
+    <div>      
+      <Router>
+        <Navbar/>
 
-      <header>
-        <h1>
-          DisTask
-        </h1>
-        <p>
-          Welcome to DisTask, where u can manage ur task, chat with ur teamates,
-          and also plan with ur teamates. 
-          <br/>
-          This website is under maintenance, please 
-          do not mess around
-        </p>
-      </header>
+
+        <Routes>
+          <Route exact path="/LoginPage" element={<LoginPage />} />
+          <Route exact path="/About" element={<About />} />
+          <Route exact path="/Contact" element={<Contact />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
 
 export default App;
+
+
