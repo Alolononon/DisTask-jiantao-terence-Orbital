@@ -4,6 +4,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
+import Testing from './pages/Testing';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
 
 
         <Routes>
+          <Route exact path="/Testing" element={<Testing />} />
           <Route exact path="/LoginPage" element={<LoginPage />} />
           <Route exact path="/About" element={<About />} />
           <Route exact path="/Contact" element={<Contact />} />
