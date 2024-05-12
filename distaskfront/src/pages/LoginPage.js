@@ -7,6 +7,11 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [pwnotmatch, setpwnotmatch] = useState(false);
+  useEffect(()=> {
+    setpwnotmatch(password!==confirmPassword);
+
+  },[password,confirmPassword])
 
 
   const sendDataToBackend = async (data) => {
@@ -45,6 +50,7 @@ function LoginPage() {
       // Handle sign up
       sendDataToBackend(data);
       console.log('Signing up with:', username, password, confirmPassword);
+      
     }
   };
 
@@ -55,17 +61,7 @@ function LoginPage() {
 
 
 
-  const [backendData, setBackendData] = useState([{}])
 
-  useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, [])
 
 
 
@@ -101,7 +97,13 @@ function LoginPage() {
               required
             />
           )}
-          <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
+          {
+            !isLogin  && pwnotmatch && (
+              <p style={{ pointerEvents: 'none' }}>
+                Confirm password not match!
+              </p>
+            )}
+          <button type="submit" disabled={!isLogin && pwnotmatch}>{isLogin ? 'Login' : 'Sign Up'}</button>
           <p onClick={() => {
             setIsLogin(!isLogin);
             clearallstate();
@@ -110,17 +112,6 @@ function LoginPage() {
           </p>
         </form>
       </div>
-
-      <div>
-        {(typeof backendData.users === 'undefined') ? (
-          <p>Loading..</p>
-        ) : (
-          backendData.users.map((user, i) => (
-            <p key={i}>{user}</p>
-          ))
-        )}
-      </div>
-
     </div>
   );
 }
