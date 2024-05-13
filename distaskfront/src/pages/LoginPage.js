@@ -1,18 +1,28 @@
 // App.js
 import React, { useEffect, useState } from 'react';
 import './LoginPage.css';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
+const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [pwnotmatch, setpwnotmatch] = useState(false);
+  const [accountExists, setAccountExists] = useState(false);
+  const [wrongLogin, setwrongLogin] = useState(false);
   useEffect(()=> {
     setpwnotmatch(password!==confirmPassword);
-
   },[password,confirmPassword])
-
+  
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    if (!token){
+      navigate('/loginpage');
+    }
+    console.log(token);
+  },[navigate]);
 
   const sendDataToBackend = async (data) => {
     try {
@@ -24,7 +34,24 @@ function LoginPage() {
         body: JSON.stringify( data ), // Your data object to send
       });
       const responseData = await response.json();
-      console.log(responseData); // You can do something with the response from the backend
+      console.log(responseData); 
+      
+      if(response.ok){
+        //login or sign up is successful===================================
+        console.log("login successfull");
+        const token = responseData.token;
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
+        navigate("/");
+      }
+      //if username exists
+      else if(response.status === 400 && responseData.error === 'Username already exists') {
+        setAccountExists(true);
+      }else if(response.status === 401 && responseData.error === 'User not found or password are incorrect') {
+        setAccountExists(false);
+        setwrongLogin(true);
+      }
+    
     } catch (error) {
       console.error('Error:', error);
     }
@@ -56,6 +83,9 @@ function LoginPage() {
 
   const clearallstate = () => {
     setConfirmPassword("");
+    setAccountExists(false);
+    setwrongLogin(false);
+    setpwnotmatch(false);
   }
 
 
@@ -68,12 +98,22 @@ function LoginPage() {
 
   return (
 
-    
-
     <div className="container">
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+          {
+            accountExists && (
+              <p style={{ pointerEvents: 'none' }}>
+                Username already exists! Try again!
+              </p>
+            )}
+            {
+            wrongLogin && (
+              <p style={{ pointerEvents: 'none' }}>
+                Wrong password or Account not exists!
+              </p>
+            )}
           <input
             type="text"
             placeholder="Username"

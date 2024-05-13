@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
 const connection = require('./db');
-
+const jwt=require('jsonwebtoken');
+const secretKey = '794613';
 const app = express();
 
 //enable CORS
@@ -16,7 +17,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-
+//check connection to mysql
 connection.connect((err) => {
   if (err) {
       console.error('Error connecting to the database: ' + err.stack);
@@ -28,28 +29,64 @@ connection.connect((err) => {
   
 // Route to handle data received from frontend
 app.post('/api', (req, res) => {
-  // Handle the data received from the frontend
+  // retriving the data received from the frontend
   const receivedData = req.body;
   console.log('Data received from frontend:', receivedData);
+  const { username, password, confirmPassword, isLogin } = receivedData;
 
-  const { username, password } = receivedData;
-
-  // Perform the MySQL query to insert data into the database
-  const query = 'INSERT INTO sakila.accounts (username, password) VALUES (?, ?)';
-  const values = [username, password];
-  
-  connection.query(query, values, (error, results, fields) => {
-    if (error) {
-      console.error('Error inserting account:', error);
-      res.status(500).json({ error: 'Error inserting account' });
-      return;
+  // checking username and password received from frontend
+  const checkQuery = 'SELECT * FROM accounts WHERE username = ?';
+  connection.query(checkQuery, [username], (err, results)=> {
+    if(err) {
+      console.error('Error checking username:', err);
+      return res.status(500).send('Internet Server Error');
     }
-    
-    // Send a response back to the frontend
-    res.json({ message: 'Account inserted successfully' });
-  }); 
+
+    //SIGNING UP
+    if(!isLogin){
+      //if username exists
+      if (results.length > 0) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+      //inserting username and password into database:accounts AND logging in
+      if(results.length==0){
+        const query = 'INSERT INTO sakila.accounts (username, password) VALUES (?, ?)';
+        const values = [username, password];
+        
+        connection.query(query, values, (error, results, fields) => {
+          if (error) {
+            console.error('Error inserting account:', error);
+            res.status(500).json({ error: 'Error inserting account' });
+            return;
+          }
+          //logging in=================================
+          res.json({ message: 'Account inserted successfully' });
+
+        }); 
+      }
+    } else { 
+    // LOGINING IN
+      const query = 'SELECT * FROM sakila.accounts WHERE username = ? AND password = ?';
+      connection.query(query, [username, password], (err, results)=> {
+        if (results.length === 1) {
+          // User found, login successful==================================
+          const receivedresults = results.body;
+          console.log("Login successful with user: "+ results[0].username);
+          const token = jwt.sign({username},secretKey,{expiresIn:'1h'});
+          return res.json({token});
+
+          //return res.status(200).json({ message: 'Login successful', user: results[0] });
+        } else {
+          // User not found or password are incorrect
+          console.log("User not found or password are incorrect");
+          return res.status(401).json({ error: 'User not found or password are incorrect' })
+        }
+      })
+    }
+  })
 
 }); 
+ 
 
 
 
@@ -62,28 +99,6 @@ app.post('/api', (req, res) => {
 
 
 
-
-
-
-// Route to insert username and password into database
-// app.post('/accounts', (req, res) => {
-//   // Extract username and password from request body
-//   const { username, password } = req.body;
-
-//   // Perform the MySQL query to insert data into the database
-//   const query = 'INSERT INTO accounts (username, password) VALUES (?, ?)';
-//   const values = [username, password];
-  
-//   console.log("here")
-//   pool.query(query, values, (error, results, fields) => {
-//     if (error) {
-//       console.error('Error inserting account:', error);
-//       res.status(500).json({ error: 'Error inserting account' });
-//       return;
-//     }
-//     res.json({ message: 'Account inserted successfully' });
-//   });
-// });
 
 
 
