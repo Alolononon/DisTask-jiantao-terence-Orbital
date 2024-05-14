@@ -4,7 +4,7 @@ import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,17 +12,21 @@ const navigate = useNavigate();
   const [pwnotmatch, setpwnotmatch] = useState(false);
   const [accountExists, setAccountExists] = useState(false);
   const [wrongLogin, setwrongLogin] = useState(false);
+
+
+  // useEffect(()=>{
+  //   const token = localStorage.getItem('token');
+  //   if (!token){
+  //     navigate('/LoginPage');
+  //   }
+  //   console.log('token:' + token);
+  // },[navigate]);
+
+
+
   useEffect(()=> {
     setpwnotmatch(password!==confirmPassword);
   },[password,confirmPassword])
-  
-  useEffect(()=>{
-    const token = localStorage.getItem('token');
-    if (!token){
-      navigate('/loginpage');
-    }
-    console.log(token);
-  },[navigate]);
 
   const sendDataToBackend = async (data) => {
     try {
