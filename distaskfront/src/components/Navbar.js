@@ -33,8 +33,8 @@ import LoginPage from "../pages/LoginPage";
           <ul>  
             {loggedin && (<li><p>user: {localStorage.getItem('username')}</p></li>)}
             {loggedin && (<li><button onClick={handleLogout}>Logoout</button></li>)}
-            <li><Link to="/About">About</Link></li>
             <li><Link to="/Contact">Contact</Link></li>
+            <li><Link to="/About">About</Link></li>
           </ul>
         </nav>
         </div>
