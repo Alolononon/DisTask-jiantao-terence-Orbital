@@ -2,23 +2,22 @@
 import {React, useEffect,useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import LoginPage from "../pages/LoginPage";
 
  function Navbar() {
 
    const navigate = useNavigate();
-  const [loggedin, setLoggedin] = useState(!!localStorage.getItem('token'));
+  const [loggedin, setLoggedin] = useState(!!sessionStorage.getItem('token'));
 
   // Use useEffect to set up any side effects
   useEffect(() => {
-    setLoggedin(!!localStorage.getItem('token'));
+    setLoggedin(!!sessionStorage.getItem('token'));
   }, [navigate]);
 
 //logout button
   const handleLogout = () => {
     // Remove the token from localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('username');
 
     // Redirect to the login page
     navigate('/LoginPage');
@@ -31,7 +30,7 @@ import LoginPage from "../pages/LoginPage";
         <nav>
         <Link to="/" className="title">DisTask</Link>
           <ul>  
-            {loggedin && (<li><p>user: {localStorage.getItem('username')}</p></li>)}
+            {loggedin && (<li><p>user: {sessionStorage.getItem('username')}</p></li>)}
             {loggedin && (<li><button onClick={handleLogout}>Logoout</button></li>)}
             <li><Link to="/Contact">Contact</Link></li>
             <li><Link to="/About">About</Link></li>

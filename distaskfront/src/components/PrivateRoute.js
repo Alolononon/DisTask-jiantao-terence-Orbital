@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const isAuthenticated = () => {
-    console.log(!!localStorage.getItem('token'))
-  return !!localStorage.getItem('token');
+    console.log(!!sessionStorage.getItem('token'))
+  return !!sessionStorage.getItem('token');
 };
 
 const PrivateRoute = ({ component: Component }) => {

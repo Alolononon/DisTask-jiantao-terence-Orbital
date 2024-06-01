@@ -7,7 +7,7 @@ import LoginPage from './pages/LoginPage';
 import Testing from './pages/Testing';
 import { useEffect } from 'react';
 import PrivateRoute from './components/PrivateRoute';
-import main from './pages/main';
+import TodoList from './pages/TodoList';
 
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
         <Navbar/>
         <Routes>
         <Route path="/loginpage" element={<LoginPage />} />
-        <Route path="/" element={<PrivateRoute component={main} />} />
+        <Route path="/" element={<PrivateRoute component={TodoList} />} />
         <Route path="/about" element={<PrivateRoute component={About} />} />
         <Route path="/contact" element={<PrivateRoute component={Contact} />} />
           {/* <Route exact path="/Testing" element={<Testing />} />

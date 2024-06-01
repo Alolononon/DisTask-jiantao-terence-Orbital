@@ -30,7 +30,7 @@ function LoginPage() {
 
   const sendDataToBackend = async (data) => {
     try {
-      const response = await fetch('http://localhost:5000/api', {
+      const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,8 +44,8 @@ function LoginPage() {
         //login or sign up is successful===================================
         console.log("login successfull");
         const token = responseData.token;
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', username);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('username', username);
         navigate("/");
       }
       //if username exists
