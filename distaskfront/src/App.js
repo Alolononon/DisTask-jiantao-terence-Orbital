@@ -8,7 +8,7 @@ import Testing from './pages/Testing';
 import { useEffect } from 'react';
 import PrivateRoute from './components/PrivateRoute';
 import TodoList from './pages/TodoList';
-
+import Friends from './pages/Friends';
 
 function App() {
 
@@ -23,6 +23,7 @@ function App() {
         <Route path="/" element={<PrivateRoute component={TodoList} />} />
         <Route path="/about" element={<PrivateRoute component={About} />} />
         <Route path="/contact" element={<PrivateRoute component={Contact} />} />
+        <Route path="/friends" element={<PrivateRoute component={Friends}/>}/>
           {/* <Route exact path="/Testing" element={<Testing />} />
           <Route exact path="/About" element={<About />} />
           <Route exact path="/Contact" element={<Contact />} /> */}

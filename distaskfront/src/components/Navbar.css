@@ -28,15 +28,56 @@ nav ul li {
 nav ul li a {
     display: block;
     text-decoration: none;
-    color: white;
-    padding: 0.5rem;
-    margin: 0.5rem;
-    border-radius: 0.5rem;
+    color: rgb(56, 58, 40);
+    padding: 4px;
+    margin: 4px;
+    border-radius: 2px;
     font-size: 1.3rem;
-
 }
 
 
 nav ul li a:not(.active) {
-    background-color: black;
+    background-color: rgb(87, 144, 160);
+}
+
+nav ul li a:hover{
+    background-color:#515cce
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0; /* Align the dropdown to the right */
+    background-color: #8995d4;
+    min-width: 160px;
+    max-width: 300px;
+    box-shadow: 0px 8px 16px 0px rgba(255, 255, 255, 0.2);
+    z-index: 1;
+    overflow-wrap: break-word; /* Ensure text wraps within the box */
+}
+  
+.dropdown-content a {
+    color: rgb(255, 255, 255);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown-content a:hover {
+    background-color: #4554f2;  
+}
+  
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+  
+.settings-icon { /*icon pic*/
+    width: 45px; /* Adjust the size as needed */
+    height: 45px; /* Adjust the size as needed */
+    cursor: pointer;
 }
