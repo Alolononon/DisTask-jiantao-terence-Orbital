@@ -15,12 +15,18 @@ const TodoList = ({ userId }) => {
   const addNewTask = async (parentID, taskContent) => {
     
     try {
+      //const todo = await axios.post('http://distask-backend.vercel.app:5000/NewTask', {username, taskContent, parentID})
       const todo = await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID})
       setRefresh(!refresh)
     } catch (error) {
       console.error('Error adding new task: ', error)
     }
     setNewTodo('')
+    //vvvvv after creating a subtask, it will appear instantly
+    settaskExpansion( (prev)=> ({
+      ...prev,
+      [parentID]: true,
+    }))
   }
 
 
@@ -28,6 +34,7 @@ const TodoList = ({ userId }) => {
   useEffect(()=> {
     const fetchTodos = async () => {
       try{
+        // const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
         const response = await axios.post('http://localhost:5000/fetchAllTasks', {username})
         console.log(response.error)
         setIncompletedTasks(response.data.incompleteTasks)
@@ -78,33 +85,68 @@ const TodoList = ({ userId }) => {
   }
 
 
+  // toggle subtask expansion
+  const [taskExpansion, settaskExpansion] = useState({})
+  const toggleTaskExpansion = (id) => {
+    settaskExpansion( (prev)=> ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
+
+
 
   const renderTodoComponent = (ID) => {
     const tasks = IncompletedTasks.filter((IncompletedTasks) => IncompletedTasks.parentID === ID);
+    
+
+    if(tasks.length===0){
+      return null;
+    }
+
     return (
       // {/* incompleted Task++++++++++++++++++++++++++++++ */}
-      <ul className='list'>
-      {tasks.map((todo) => (
-        <li className='list-item' key={todo.id}>
-          {todo.taskContent}
-          <small className='createdBy'>created by {todo.username}</small>
-          <button onClick={() => clickcompleted(todo.id)}> completed </button>
+      <div>
+        { (ID!==null) && (
+          <span onClick={()=>toggleTaskExpansion(ID)} className='toggle-span'>
+            {taskExpansion[ID] ? '▼' : '▶'}
+          </span>
+        ) }
 
-          {/* adding SUBTASK */}
-          <input
-            type='text'
-            value={newSubTodo[todo.id]}
-            onChange={(e) => handleSubTaskInputChange(todo.id, e.target.value)}
-            placeholder='Add Sub-task'
-            onKeyDown={(e)=> handleAddNewSubTask(e, todo.id )}
-          />
-        <div style={{marginLeft:'20px'}} >
-        {renderTodoComponent(todo.id)}
-        </div>
-        </li>
         
-      ))}
-    </ul>
+
+          <ul className='list'>
+          {tasks.map((todo) => (
+
+            <React.Fragment>
+              { (!todo.parentID || taskExpansion[todo.parentID])  && (
+              <li className='list-item' >
+              {todo.taskContent}
+              <small className='createdBy'>created by {todo.username}</small>
+              <button onClick={() => clickcompleted(todo.id)}> completed </button>
+
+              {/* adding SUBTASK */}
+              <input
+                type='text'
+                value={newSubTodo[todo.id]}
+                onChange={(e) => handleSubTaskInputChange(todo.id, e.target.value)}
+                placeholder='Add Sub-task'
+                onKeyDown={(e)=> handleAddNewSubTask(e, todo.id )}
+              />
+              
+            
+            <div style={{marginLeft:'20px'}} >
+            {renderTodoComponent(todo.id)}
+            </div>
+            
+            </li>
+            )}
+            </React.Fragment>
+          
+            ))}
+          </ul>
+        
+    </div>
   )}
   
 
