@@ -1,0 +1,20 @@
+.popout{
+    position: absolute;
+    transform: translateY(-35px);
+    height: 300px;
+    width: 300px;
+    background-color: aliceblue;
+}
+
+.close-button {
+    display: flex;
+    justify-content: right;
+}
+.wording{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    
+    margin-right: 40px;
+}

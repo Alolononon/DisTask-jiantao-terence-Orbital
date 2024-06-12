@@ -28,3 +28,22 @@
 .toggle-span{
     cursor: pointer;
 }
+
+.Task2ndLayer {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start;
+}
+.Task2ndLayer button,
+.Task2ndLayer input,
+.Task2ndLayer .popout {
+  margin-right: 10px; /* Add spacing between items */
+  
+  
+}
+.Adding-Subtask {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2%;
+}

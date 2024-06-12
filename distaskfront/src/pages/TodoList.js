@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './TodoList.css';
+import AssigningTaskPopout from '../components/AssigningTaskPopout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+
+
+
 
 const TodoList = ({ userId }) => {
   const [IncompletedTasks, setIncompletedTasks] = useState([]);
@@ -9,7 +15,7 @@ const TodoList = ({ userId }) => {
   const [refresh, setRefresh] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false)
   const [newSubTodo, setSubTodo] = useState({})
-  
+  const [AssignTaskPopoutstate, setAssignTasknPopoutstate] = useState({});
   const username = sessionStorage.getItem('username')
 
   const addNewTask = async (parentID, taskContent) => {
@@ -94,6 +100,15 @@ const TodoList = ({ userId }) => {
     }))
   }
 
+// toggle assigningTask Popout
+const toggleAssignTaskPopOut = (id) => {
+  setAssignTasknPopoutstate((prevStates) => ({
+    ...prevStates,
+    [id]: !prevStates[id],
+  }));
+};
+
+
 
 
   const renderTodoComponent = (ID) => {
@@ -120,25 +135,46 @@ const TodoList = ({ userId }) => {
 
             <React.Fragment>
               { (!todo.parentID || taskExpansion[todo.parentID])  && (
-              <li className='list-item' >
-              {todo.taskContent}
-              <small className='createdBy'>created by {todo.username}</small>
-              <button onClick={() => clickcompleted(todo.id)}> completed </button>
+                <li className='list-item' >
 
-              {/* adding SUBTASK */}
-              <input
-                type='text'
-                value={newSubTodo[todo.id]}
-                onChange={(e) => handleSubTaskInputChange(todo.id, e.target.value)}
-                placeholder='Add Sub-task'
-                onKeyDown={(e)=> handleAddNewSubTask(e, todo.id )}
-              />
+                {todo.taskContent}
+                <small className='createdBy'>created by {todo.username}</small>
+
+                
+                <div className='Task2ndLayer'>
+                  <button onClick={() => clickcompleted(todo.id)}> completed </button>
+
+                  {/* adding SUBTASK */}
+                  <div className='Adding-Subtask'>
+                    <input
+                      type='text'
+                      value={newSubTodo[todo.id]}
+                      onChange={(e) => handleSubTaskInputChange(todo.id, e.target.value)}
+                      placeholder='Add Sub-task'
+                      onKeyDown={(e)=> handleAddNewSubTask(e, todo.id )}
+                    />
+                  </div>
+
+                  {/* POPOUT Assigning Task to friend */}
+                  <div>
+
+                    <button onClick={()=> toggleAssignTaskPopOut(todo.id)}>
+                      <FontAwesomeIcon icon={faUsers} />
+                    </button>
+                    {AssignTaskPopoutstate[todo.id] && 
+                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)}>
+
+                      </AssigningTaskPopout>}
+                  </div>
+                </div>
               
             
             <div style={{marginLeft:'20px'}} >
             {renderTodoComponent(todo.id)}
             </div>
-            
+
+
+
             </li>
             )}
             </React.Fragment>
