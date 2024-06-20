@@ -3,111 +3,119 @@ import axios from 'axios';
 import './TodoList.css';
 import AssigningTaskPopout from '../components/AssigningTaskPopout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
-
+import { faMessage, faUsers } from '@fortawesome/free-solid-svg-icons';
+import ChatPopout from '../components/ChatPopout';
 
 
 
 const TodoList = ({ userId }) => {
-  const [IncompletedTasks, setIncompletedTasks] = useState([]);
-  const [CompletedTasks, setCompletedTasks] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
-  const [refresh, setRefresh] = useState(false);
-  const [showCompleted, setShowCompleted] = useState(false)
-  const [newSubTodo, setSubTodo] = useState({})
-  const [AssignTaskPopoutstate, setAssignTasknPopoutstate] = useState({});
-  const username = sessionStorage.getItem('username')
+const [IncompletedTasks, setIncompletedTasks] = useState([]);
+const [CompletedTasks, setCompletedTasks] = useState([]);
+const [newTodo, setNewTodo] = useState('');
+const [refresh, setRefresh] = useState(false);
+const [showCompleted, setShowCompleted] = useState(false)
+const [newSubTodo, setSubTodo] = useState({})
+const username = sessionStorage.getItem('username')
 
-  const addNewTask = async (parentID, taskContent) => {
-    
-    try {
-      //const todo = await axios.post('http://distask-backend.vercel.app:5000/NewTask', {username, taskContent, parentID})
-      const todo = await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID})
-      setRefresh(!refresh)
-    } catch (error) {
-      console.error('Error adding new task: ', error)
+const addNewTask = async (parentID, taskContent) => {
+  
+  try {
+    // await axios.post('http://distask-backend.vercel.app:5000/NewTask', {username, taskContent, parentID})
+     await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID})
+    setRefresh(!refresh)
+  } catch (error) {
+    console.error('Error adding new task: ', error)
     }
-    setNewTodo('')
-    //vvvvv after creating a subtask, it will appear instantly
-    settaskExpansion( (prev)=> ({
-      ...prev,
-      [parentID]: true,
-    }))
-  }
+  setNewTodo('')
+  //vvvvv after creating a subtask, it will appear instantly
+  settaskExpansion( (prev)=> ({
+    ...prev,
+    [parentID]: true,
+  }))
+}
 
 
 
-  useEffect(()=> {
-    const fetchTodos = async () => {
-      try{
-        // const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
-        const response = await axios.post('http://localhost:5000/fetchAllTasks', {username})
-        console.log(response.error)
-        setIncompletedTasks(response.data.incompleteTasks)
-        setCompletedTasks(response.data.completedTasks)
+useEffect(()=> {
+  const fetchTodos = async () => {
+    try{
+      // const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
+      const response = await axios.post('http://localhost:5000/fetchAllTasks', {username})
+      console.log(response.error)
+      setIncompletedTasks(response.data.incompleteTasks)
+      setCompletedTasks(response.data.completedTasks)
       } catch (error) {
         console.error('Error feetching ToDos from database: ', error)
-      }
     }
+  }
 
-    fetchTodos();
-  }, [refresh]);
-
-
+  fetchTodos();
+  }, [refresh,username]);
+  
+  
   const handleKeyPress = (e) => {
     if (e.key==='Enter' && newTodo.trim()){
       addNewTask(null, newTodo);
-    }
+      }
+      }
+      
+const toggleShowCompletedTasks = () => {
+  setShowCompleted(!showCompleted)
   }
-
-  const toggleShowCompletedTasks = () => {
-    setShowCompleted(!showCompleted)
-  }
-
+  
   const clickcompleted = async (id) => {
     try{
       await axios.post('http://localhost:5000/completeTask', {id})
       setRefresh(!refresh)
-    } catch (error) {
-      console.error('error updating completed task in ToDos: ', error)
+  } catch (error) {
+    console.error('error updating completed task in ToDos: ', error)
     }
-  }
+    }
 
-
-
-
-  const handleSubTaskInputChange = (id, value) => {
-    setSubTodo({
-      ...newSubTodo,
-      [id]: value,
-    })
+    
+    
+    
+    const handleSubTaskInputChange = (id, value) => {
+      setSubTodo({
+    ...newSubTodo,
+    [id]: value,
+  })
   }
   
-  const handleAddNewSubTask = async (e, id) => {
-    if(e.key === 'Enter' && newSubTodo[id].trim()) {
-      await addNewTask(id, newSubTodo[id]);
-      handleSubTaskInputChange(id,'');
-    }
+const handleAddNewSubTask = async (e, id) => {
+  if(e.key === 'Enter' && newSubTodo[id].trim()) {
+    await addNewTask(id, newSubTodo[id]);
+    handleSubTaskInputChange(id,'');
+  }
   }
 
 
   // toggle subtask expansion
   const [taskExpansion, settaskExpansion] = useState({})
   const toggleTaskExpansion = (id) => {
-    settaskExpansion( (prev)=> ({
-      ...prev,
-      [id]: !prev[id],
+  settaskExpansion( (prev)=> ({
+    ...prev,
+    [id]: !prev[id],
     }))
-  }
+    }
+    
+  // toggle assigningTask Popout
+  const [AssignTaskPopoutstate, setAssignTasknPopoutstate] = useState({});
+  const toggleAssignTaskPopOut = (id) => {
+    setAssignTasknPopoutstate((prevStates) => ({
+      ...prevStates,
+      [id]: !prevStates[id],
+    }));
+  };
 
-// toggle assigningTask Popout
-const toggleAssignTaskPopOut = (id) => {
-  setAssignTasknPopoutstate((prevStates) => ({
+//toggle Chat Popout
+const [ChatPopoutstate, setChatPopoutstate] = useState({})
+const toggleChatPopout = (id) => {
+  setChatPopoutstate((prevStates) => ({
     ...prevStates,
     [id]: !prevStates[id],
   }));
 };
-
 
 
 
@@ -133,7 +141,7 @@ const toggleAssignTaskPopOut = (id) => {
           <ul className='list'>
           {tasks.map((todo) => (
 
-            <React.Fragment>
+            <React.Fragment key={todo.id}>
               { (!todo.parentID || taskExpansion[todo.parentID])  && (
                 <li className='list-item' >
 
@@ -142,7 +150,7 @@ const toggleAssignTaskPopOut = (id) => {
 
                 
                 <div className='Task2ndLayer'>
-                  <button onClick={() => clickcompleted(todo.id)}> completed </button>
+                  <button onClick={() => clickcompleted(todo.id)} className='completed-button'> completed </button>
 
                   {/* adding SUBTASK */}
                   <div className='Adding-Subtask'>
@@ -157,15 +165,30 @@ const toggleAssignTaskPopOut = (id) => {
 
                   {/* POPOUT Assigning Task to friend */}
                   <div>
-
-                    <button onClick={()=> toggleAssignTaskPopOut(todo.id)}>
+                    <button onClick={()=> toggleAssignTaskPopOut(todo.id)} className='toggleAssignTaskPopOut'>
                       <FontAwesomeIcon icon={faUsers} />
                     </button>
                     {AssignTaskPopoutstate[todo.id] && 
-                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)}>
-
-                      </AssigningTaskPopout>}
+                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)}/>
+                    }
                   </div>
+
+
+                  {/* Chat Popout */}
+                  <div>
+                    <button onClick={()=> toggleChatPopout(todo.id)} className='toggleChatPopout'>
+                      <FontAwesomeIcon icon={faMessage} />
+                    </button>
+                    {ChatPopoutstate[todo.id] && 
+                      <ChatPopout onClose={()=> toggleChatPopout(todo.id)} taskid={todo.id} username={username}/>
+                    }
+                  </div>
+
+
+
+
+
+
                 </div>
               
             
@@ -204,7 +227,9 @@ const toggleAssignTaskPopOut = (id) => {
           placeholder="Add a task"
           onKeyDown={(e) => handleKeyPress(e)}
         />
-        <button onClick={()=> addNewTask(null, newTodo)} disabled={!newTodo.trim()}>Add</button>
+        <button onClick={()=> addNewTask(null, newTodo)} disabled={!newTodo.trim()} className='addNewTaskbutton'>
+          Add
+        </button>
       </div>
 
       <div>

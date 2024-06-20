@@ -5,7 +5,6 @@ const {ToDo} = require('./initializingDB')
 
 
 const fetchAllTasks = async (req, res) => {
-    console.log('here11')
     try {
         const {username} = req.body;
         const incompleteTasks = await ToDo.findAll({where: {

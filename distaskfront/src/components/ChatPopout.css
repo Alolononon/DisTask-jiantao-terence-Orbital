@@ -1,0 +1,13 @@
+.chatbox{
+    height:325px;
+
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.sendMessageInput{
+    width: 254px;
+}
+.sendChatbutton{
+    padding: 3px;
+}

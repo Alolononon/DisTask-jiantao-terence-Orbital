@@ -1,21 +1,24 @@
 const express = require('express');
-const cors = require('cors');
-const connection = require('./db');
 const app = express();
+const cors = require('cors');
+
+const connection = require('./db');
 const loginController = require('./login');
 const NewTask = require('./NewTask');
 const fetchAllTasks = require('./fetchAllTasks')
 const completeTask = require('./completeTask')
 
 
-//enable CORS
-const corsOptions = {
-  origin: ['http://localhost', 'http://localhost:3000'], // Allow requests from both http://localhost and http://localhost:3000
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-  credentials: true // Allow credentials such as cookies
-};
-app.use(cors(corsOptions));
+// //enable CORS
+// const corsOptions = {
+//   origin: ['http://localhost', 'http://localhost:3000'], // Allow requests from both http://localhost and http://localhost:3000
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+//   allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+//   credentials: true // Allow credentials such as cookies
+// };
+// app.use(cors(corsOptions));
+
+app.use(cors())
 
 app.use(express.json());
 
@@ -31,14 +34,21 @@ connection.connect((err) => {
   
 // Route to handle data received from frontend
 app.post('/login', loginController); 
- 
 app.post('/NewTask', NewTask);
 app.post('/fetchAllTasks', fetchAllTasks)
-
 app.post('/completeTask', completeTask)
 
 
 
+// CHatttttttttttttttttttttt
+const chat = require('./chat') ;
+const server = chat(app)
+
+server.listen(5000, ()=> {
+  console.log("chat server listening on 5000")
+})
+
+
 
 
 
@@ -51,5 +61,5 @@ app.post('/completeTask', completeTask)
 
 
 
-app.listen(5000, ()=> {console.log("Server started on port 5000") })
+// app.listen(5000, ()=> {console.log("Server started on port 5000") })
 

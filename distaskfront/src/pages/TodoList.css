@@ -23,7 +23,10 @@
 .footer{
     display: flex;
 }
-
+.addNewTaskbutton{
+    padding: auto;
+    margin-bottom: 10px;
+}
 
 .toggle-span{
     cursor: pointer;
@@ -34,16 +37,19 @@
     align-items: center; 
     justify-content: flex-start;
 }
-.Task2ndLayer button,
-.Task2ndLayer input,
-.Task2ndLayer .popout {
-  margin-right: 10px; /* Add spacing between items */
-  
-  
+.completed-button{
+    margin-right: 10px; 
 }
 .Adding-Subtask {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-top: 2%;
+    margin-top: 1%;
+    margin-right: 10px; 
+}
+.toggleAssignTaskPopOut{
+    margin-right: 10px; 
+}
+.toggleChatPopout{
+    margin-right: 10px; 
 }

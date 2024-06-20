@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./AssigningTaskPopout.css"
+import React from "react";
+import "./Popout.css"
 
 
 function AssigningTaskPopout ({onClose}) {
@@ -8,13 +8,13 @@ function AssigningTaskPopout ({onClose}) {
         <div className="popout">
 
             {/* top layer */}
-            <div className="close-button">
-            <p className="wording">Task Assigning</p>
-            <button onClick={onClose} >Close</button>
+            <div className="top-layer">
+                <p className="wording">Task Assigning</p>
+                <button onClick={onClose} className="close">Close</button>
             </div>
 
             {/* Assigning Task */}
-
+            
 
         </div>
     )
