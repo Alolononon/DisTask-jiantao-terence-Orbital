@@ -11,17 +11,22 @@ import ChatPopout from '../components/ChatPopout';
 const TodoList = ({ userId }) => {
 const [IncompletedTasks, setIncompletedTasks] = useState([]);
 const [CompletedTasks, setCompletedTasks] = useState([]);
+const [AllTasks, setAllTasks] =useState([])
 const [newTodo, setNewTodo] = useState('');
 const [refresh, setRefresh] = useState(false);
 const [showCompleted, setShowCompleted] = useState(false)
 const [newSubTodo, setSubTodo] = useState({})
 const username = sessionStorage.getItem('username')
 
-const addNewTask = async (parentID, taskContent) => {
+const addNewTask = async (parentID, taskContent, participants) => {
   
   try {
+    if(parentID){
+
+    }
+    
     // await axios.post('http://distask-backend.vercel.app:5000/NewTask', {username, taskContent, parentID})
-     await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID})
+     await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID, participants})
     setRefresh(!refresh)
   } catch (error) {
     console.error('Error adding new task: ', error)
@@ -42,8 +47,9 @@ useEffect(()=> {
       // const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
       const response = await axios.post('http://localhost:5000/fetchAllTasks', {username})
       console.log(response.error)
-      setIncompletedTasks(response.data.incompleteTasks)
-      setCompletedTasks(response.data.completedTasks)
+      // setIncompletedTasks(response.data.incompleteTasks)
+      // setCompletedTasks(response.data.completedTasks)
+      setAllTasks(response.data.tasks)
       } catch (error) {
         console.error('Error feetching ToDos from database: ', error)
     }
@@ -55,7 +61,8 @@ useEffect(()=> {
   
   const handleKeyPress = (e) => {
     if (e.key==='Enter' && newTodo.trim()){
-      addNewTask(null, newTodo);
+      const participants = [username]
+      addNewTask(null, newTodo, participants);
       }
       }
       
@@ -82,9 +89,9 @@ const toggleShowCompletedTasks = () => {
   })
   }
   
-const handleAddNewSubTask = async (e, id) => {
+const handleAddNewSubTask = async (e, id, participants) => {
   if(e.key === 'Enter' && newSubTodo[id].trim()) {
-    await addNewTask(id, newSubTodo[id]);
+    await addNewTask(id, newSubTodo[id], participants);
     handleSubTaskInputChange(id,'');
   }
   }
@@ -119,14 +126,24 @@ const toggleChatPopout = (id) => {
 
 
 
-  const renderTodoComponent = (ID) => {
-    const tasks = IncompletedTasks.filter((IncompletedTasks) => IncompletedTasks.parentID === ID);
+  const renderTodoComponent = (ID, listofTaskssss, status) => {
+    const parentTaskIds = new Set(listofTaskssss.map(task => task.id));
     
-
+    let tasks = [];
+    if(ID===null){
+      if(status==="incomplete"){
+        tasks = listofTaskssss.filter((task) =>  task.completed===false && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
+      } else if (status==="completed") {
+        tasks = listofTaskssss.filter((task) =>  task.completed===true && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
+      }
+    } else {
+      tasks = listofTaskssss.filter((task) =>   task.parentID === ID);
+    }
+    
     if(tasks.length===0){
       return null;
     }
-
+    
     return (
       // {/* incompleted Task++++++++++++++++++++++++++++++ */}
       <div>
@@ -139,18 +156,30 @@ const toggleChatPopout = (id) => {
         
 
           <ul className='list'>
-          {tasks.map((todo) => (
+          {tasks.map((todo,index) => (
 
-            <React.Fragment key={todo.id}>
-              { (!todo.parentID || taskExpansion[todo.parentID])  && (
+            <React.Fragment key={index}>
+              { (!ID || taskExpansion[todo.parentID])  && (
                 <li className='list-item' >
 
                 {todo.taskContent}
+                <div>
                 <small className='createdBy'>created by {todo.username}</small>
+                
+                { todo.usersAssigned && todo.usersAssigned.includes(username) && (
+                  <span className='AssignedToYou'>Assigned To You</span>
+                ) }
+                
+                </div>
+                
 
                 
                 <div className='Task2ndLayer'>
-                  <button onClick={() => clickcompleted(todo.id)} className='completed-button'> completed </button>
+                  {todo.completed===false 
+                  ? (<button onClick={() => clickcompleted(todo.id)} className='completed-button'> completed </button>)
+                  :(<button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>)
+
+                  }
 
                   {/* adding SUBTASK */}
                   <div className='Adding-Subtask'>
@@ -159,7 +188,7 @@ const toggleChatPopout = (id) => {
                       value={newSubTodo[todo.id]}
                       onChange={(e) => handleSubTaskInputChange(todo.id, e.target.value)}
                       placeholder='Add Sub-task'
-                      onKeyDown={(e)=> handleAddNewSubTask(e, todo.id )}
+                      onKeyDown={(e)=> handleAddNewSubTask(e, todo.id, todo.participants )}
                     />
                   </div>
 
@@ -169,7 +198,7 @@ const toggleChatPopout = (id) => {
                       <FontAwesomeIcon icon={faUsers} />
                     </button>
                     {AssignTaskPopoutstate[todo.id] && 
-                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)}/>
+                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username}/>
                     }
                   </div>
 
@@ -193,7 +222,7 @@ const toggleChatPopout = (id) => {
               
             
             <div style={{marginLeft:'20px'}} >
-            {renderTodoComponent(todo.id)}
+            {renderTodoComponent(todo.id, listofTaskssss)}
             </div>
 
 
@@ -233,7 +262,7 @@ const toggleChatPopout = (id) => {
       </div>
 
       <div>
-        {renderTodoComponent(null)}
+        {renderTodoComponent(null,AllTasks, "incomplete")}
 
 
         {/* completed Taskkksss----------------------- */}
@@ -241,15 +270,17 @@ const toggleChatPopout = (id) => {
           {showCompleted ? 'Hide completed Tasks' : 'Show completed Tasks'}
         </button>
         {showCompleted && (
-          <ul className='list'>
-            {CompletedTasks.map((todo) => (
-              <li className='list-item' key={todo.id}>
-                {todo.taskContent}
-                <small className='createdBy'>created by {todo.username}</small>
-                <button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>
-              </li>
-            ))}
-          </ul>
+          // <ul className='list'>
+          //   {CompletedTasks.map((todo) => (
+          //     <li className='list-item' key={todo.id}>
+          //       {todo.taskContent}
+          //       <small className='createdBy'>created by {todo.username}</small>
+          //       <button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>
+          //     </li>
+          //   ))}
+          // </ul>
+
+          renderTodoComponent(null, AllTasks, "completed")
         )}
       </div>
 

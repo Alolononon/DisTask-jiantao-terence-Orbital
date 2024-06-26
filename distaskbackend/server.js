@@ -7,6 +7,7 @@ const loginController = require('./login');
 const NewTask = require('./NewTask');
 const fetchAllTasks = require('./fetchAllTasks')
 const completeTask = require('./completeTask')
+const TaskAssigning = require('./TaskAssigning')
 
 
 // //enable CORS
@@ -37,6 +38,7 @@ app.post('/login', loginController);
 app.post('/NewTask', NewTask);
 app.post('/fetchAllTasks', fetchAllTasks)
 app.post('/completeTask', completeTask)
+app.post('/TaskAssigning', TaskAssigning)
 
 
 
