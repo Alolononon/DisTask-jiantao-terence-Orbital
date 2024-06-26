@@ -50,9 +50,13 @@ import "./Navbar.css";
           {loggedin ? (
             <>
             <Link to="/" className="title">DisTask</Link>
+
+
             <ul>
               <li><p>{sessionStorage.getItem('username')}</p></li>
               <li><button onClick={handleLogout}>Logout</button></li>
+              <li><Link to="/About">About</Link></li>
+              <li><Link to="/Contact">Contact</Link></li>
               <li className="dropdown">
                   <img src="/settings.png" alt="Settings" className="settings-icon" />
                   <div className="dropdown-content">
@@ -71,7 +75,7 @@ import "./Navbar.css";
             <ul>
               <li><Link to="/About">About</Link></li>
               <li><Link to="/Contact">Contact</Link></li>
-              <li><Link to="/LoginPage>">Login</Link></li>
+              <li><Link to="/LoginPage">Login</Link></li>
               </ul>
             </>
           )

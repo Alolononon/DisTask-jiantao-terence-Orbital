@@ -11,7 +11,7 @@
     padding: 10px 35px;
     
 }.sectiontabbutton.inactive{
-  background-color: lightgray; /* Color for inactive state */
+  background-color: rgb(175, 175, 175); /* Color for inactive state */
   color: black; /* Optional: black text for better contrast */
 }
 

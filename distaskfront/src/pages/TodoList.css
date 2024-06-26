@@ -9,6 +9,12 @@
     padding: 10px;
 }
 
+.taskContent{
+
+}
+.taskContent.inactive{
+    text-decoration: line-through;
+}
 
 .createdBy{
     margin-right: 10px;
