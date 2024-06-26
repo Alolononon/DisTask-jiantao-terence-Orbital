@@ -14,7 +14,7 @@ function Testing() {
         body: JSON.stringify({ key: 'value' }), // Your data object to send
       });
       const responseData = await response.json();
-      console.log(responseData); // You can do something with the response from the backend
+      console.log(responseData);
     } catch (error) {
       console.error('Error:', error);
     }

@@ -1,0 +1,63 @@
+.topsection{
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+.sectiontabbutton{
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    padding: 10px 35px;
+    
+}.sectiontabbutton.inactive{
+  background-color: lightgray; /* Color for inactive state */
+  color: black; /* Optional: black text for better contrast */
+}
+
+
+.participant-list {
+    list-style:circle;
+    padding: 0;
+    overflow-y: auto;
+  }
+  
+  .participant-item {
+    margin-bottom: 10px; /* Adjust spacing between rows */
+    margin-left: 20px;
+  }
+  
+  .participant-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .participant-name {
+    width: 210px; /* Fixed width for participant name */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate text with ellipsis if it overflows */
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .action-container {
+    margin-left: auto; /* Pushes the button/message to the right */
+  }
+  
+  .CreatorCannotBeRemoved {
+    background-color: rgb(255, 119, 46);
+    
+    padding: 5px;
+    font-size: 0.8em; /* Adjust font size as needed */
+  }
+  
+  .action-button {
+    margin-left: 10px; /* Adjust spacing between name and button */
+  }
+
+  .creator-button {
+    background-color: rgb(255, 119, 46); /* Example background color */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: not-allowed; /* Use pointer for disabled state */
+  }

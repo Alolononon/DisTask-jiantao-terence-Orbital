@@ -6,16 +6,20 @@
 
 .list-item{
     border: 1px solid #000000;
-    
     padding: 10px;
 }
 
 
 .createdBy{
-    display: block;
+    margin-right: 10px;
     font-size: 11px;
 }
-
+.AssignedToYou{
+    background-color: #ffcccb; 
+    font-size: 13px;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
 
 .box {
     padding: 10px;  
@@ -23,4 +27,34 @@
 
 .footer{
     display: flex;
+}
+.addNewTaskbutton{
+    padding: auto;
+    margin-bottom: 10px;
+}
+
+.toggle-span{
+    cursor: pointer;
+}
+
+.Task2ndLayer {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start;
+}
+.completed-button{
+    margin-right: 10px; 
+}
+.Adding-Subtask {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 1%;
+    margin-right: 10px; 
+}
+.toggleAssignTaskPopOut{
+    margin-right: 10px; 
+}
+.toggleChatPopout{
+    margin-right: 10px; 
 }

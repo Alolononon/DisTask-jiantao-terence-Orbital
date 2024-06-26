@@ -30,6 +30,7 @@ function LoginPage() {
 
   const sendDataToBackend = async (data) => {
     try {
+      //const response = await fetch('https://distask-backend.vercel.app/login', {
       const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {

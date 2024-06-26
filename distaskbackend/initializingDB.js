@@ -23,6 +23,14 @@ const {Sequelize, DataTypes} = require('sequelize')
      type: DataTypes.BOOLEAN,
      allowNull: false,  
      defaultValue: false, 
+    },
+    participants: {
+        type: DataTypes.JSON,
+        allowNull: false
+    },
+    usersAssigned: {
+        type: DataTypes.JSON,
+        allowNull:true
     }
     }, {
     timestamps: true,   // automatically adds createdAt and updatedAt

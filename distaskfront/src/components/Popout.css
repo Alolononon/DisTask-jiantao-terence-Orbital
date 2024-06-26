@@ -1,0 +1,27 @@
+.popout{
+    position: absolute;
+    transform: translateY(-35px);
+    height: 400px;
+    width: 300px;
+    background-color: aliceblue;
+    border-style:solid;
+    border-width: 1px;
+}
+
+.top-layer {
+    display: flex;
+    justify-content: right;
+    background-color: lightgrey;
+}
+.wording{
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    text-align: center;
+    cursor: default;
+
+}
+.wording:hover{
+    text-decoration: none;
+    color: inherit;   
+}
