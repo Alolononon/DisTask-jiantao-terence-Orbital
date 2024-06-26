@@ -6,6 +6,8 @@ const loginController = require('./login');
 const NewTask = require('./NewTask');
 const fetchAllTasks = require('./fetchAllTasks')
 const completeTask = require('./completeTask')
+const {ToDo} = require('./initializingDB');
+const {Users} = require('./Frienddb.js');
 
 
 //enable CORS
@@ -37,6 +39,41 @@ app.post('/fetchAllTasks', fetchAllTasks)
 
 app.post('/completeTask', completeTask)
 
+app.post('/users', async (req, res) => { //Endpoint to add friend
+  try {
+    const { username } = req.body;
+    const user = await User.create({ username });
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/search', async (req, res) => { //endpoint to search
+  const query = req.query.query.toLowerCase();
+  try {
+    const users = await User.findAll({
+      where: {
+        username: {
+          [Sequelize.Op.like]: `%${query}%`,
+        },
+      },
+    });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to fetch all users
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 

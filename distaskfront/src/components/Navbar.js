@@ -36,6 +36,9 @@ import "./Navbar.css";
       case "Friends": // Check if the value is "Friends"
         navigate('/Friends'); // Navigate to the Friends page
         break;
+      case "AddFriend":
+        navigate('/AddFriend');
+        break;
       default:
         console.log('Invalid option');
     }
@@ -55,6 +58,7 @@ import "./Navbar.css";
                   <div className="dropdown-content">
                     <a href="#!" onClick={() => getsettings("Profile")}>Profile</a>
                     <a href="#!" onClick={() => getsettings("Friends")}>Friends</a>
+                    <a href="#!" onClick={() => getsettings("AddFriend")}>Add Friends</a>
                     {/* <a href="#!" onClick={() => getsettings("Logout")}>Logout</a> DOESN'T WORK AS OF YET*/} 
                   </div>
               </li>
@@ -75,6 +79,8 @@ import "./Navbar.css";
         </nav>
       </div>
     )
+
+    //old code here for reference can delete later
     // return(
     //     <div>
     //     <nav>

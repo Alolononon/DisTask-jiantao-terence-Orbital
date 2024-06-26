@@ -28,6 +28,8 @@ const {Sequelize, DataTypes} = require('sequelize')
     timestamps: true,   // automatically adds createdAt and updatedAt
     tableName: 'todos'  // explicit table name if different from model name
     });
+
+
     sequelize.sync()    // Sync the model with the database
     .then(() => console.log('ToDo table created successfully.'))
     .catch(err => console.log('Error: ' + err));
