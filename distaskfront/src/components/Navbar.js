@@ -39,6 +39,12 @@ import "./Navbar.css";
       case "AddFriend":
         navigate('/AddFriend');
         break;
+      case "Contact":
+        navigate('/Contact');
+        break;
+      case "About":
+        navigate('/About')
+        break;
       default:
         console.log('Invalid option');
     }
@@ -53,16 +59,16 @@ import "./Navbar.css";
 
 
             <ul>
-              <li><p>{sessionStorage.getItem('username')}</p></li>
-              <li><button onClick={handleLogout}>Logout</button></li>
-              <li><Link to="/About">About</Link></li>
-              <li><Link to="/Contact">Contact</Link></li>
+              <li><p className="username">{sessionStorage.getItem('username')}</p></li>
+              <li><button onClick={handleLogout} className="logoutButton">Logout</button></li>
               <li className="dropdown">
                   <img src="/settings.png" alt="Settings" className="settings-icon" />
                   <div className="dropdown-content">
                     <a href="#!" onClick={() => getsettings("Profile")}>Profile</a>
                     <a href="#!" onClick={() => getsettings("Friends")}>Friends</a>
                     <a href="#!" onClick={() => getsettings("AddFriend")}>Add Friends</a>
+                    <a href="#!" onClick={() => getsettings("Contact")}>Contact</a>
+                    <a href="#!" onClick={() => getsettings("About")}>About</a>
                     {/* <a href="#!" onClick={() => getsettings("Logout")}>Logout</a> DOESN'T WORK AS OF YET*/} 
                   </div>
               </li>
