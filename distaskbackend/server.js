@@ -7,10 +7,8 @@ const loginController = require('./login');
 const NewTask = require('./NewTask');
 const fetchAllTasks = require('./fetchAllTasks')
 const completeTask = require('./completeTask')
-const {ToDo} = require('./initializingDB');
-const {Users} = require('./Frienddb.js');
 const TaskAssigning = require('./TaskAssigning')
-
+const userRoutes = require('./userRoutes');
 
 // //enable CORS
 // const corsOptions = {
@@ -24,6 +22,8 @@ const TaskAssigning = require('./TaskAssigning')
 app.use(cors())
 
 app.use(express.json());
+
+app.use('/users', userRoutes);
 
 //check connection to mysql
 connection.connect((err) => {
@@ -72,6 +72,23 @@ app.get('/search', async (req, res) => { //endpoint to search
 app.get('/users', async (req, res) => {
   try {
     const users = await User.findAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/searchUsers', async (req, res) => {
+  const searchTerm = req.query.username; // Get the search term from the query parameters
+
+  try {
+    const users = await User.findAll({
+      where: {
+        username: {
+          [Sequelize.Op.like]: `%${searchTerm}%`
+        }
+      }
+    });
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
