@@ -74,7 +74,8 @@ function AddFriend() {
     if (username.trim() !== '') {
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?username=${username}`);
-        setSearchResults(response.data);
+        setSearchResults(response.data.searched);
+        
       } catch (error) {
         console.error('Error searching users:', error);
       }
@@ -85,9 +86,11 @@ function AddFriend() {
 
   const handleSearchUsers = async () => {
     if (friendUsername.trim() !== '') {
+      console.log("runnn")
+      console.log(friendUsername)
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?username=${friendUsername}`);
-        setSearchResults(response.data);
+        setSearchResults(response.data.searched);
       } catch (error) {
         console.error('Error searching users:', error);
       }
@@ -99,7 +102,7 @@ function AddFriend() {
   const handleAddFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/addFriend', {
-        userId: sessionStorage.getItem('token'), // Replace with actual logged-in user ID
+        userId: sessionStorage.getItem('username'), // Replace with actual logged-in user ID
         friendUsername: friendId // Assuming friendId is the actual ID of the user selected from search
       });
       console.log('Friend added:', response.data);
@@ -123,10 +126,10 @@ function AddFriend() {
         <button onClick={handleSearchUsers}>Search</button>
       </div>
       <ul>
-        {searchResults.map((user) => (
-          <li key={user.id}>
-            {user.username}
-            <button onClick={() => handleAddFriend(user.id)}>Add Friend</button>
+        {searchResults.map((user, index) => (
+          <li key={index}>
+            {user}
+            <button onClick={() => handleAddFriend(user)}>Add Friend</button>
           </li>
         ))}
       </ul>

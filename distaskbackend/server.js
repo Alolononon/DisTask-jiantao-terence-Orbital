@@ -8,7 +8,7 @@ const NewTask = require('./NewTask');
 const fetchAllTasks = require('./fetchAllTasks')
 const completeTask = require('./completeTask')
 const TaskAssigning = require('./TaskAssigning')
-const userRoutes = require('./userRoutes');
+
 
 // //enable CORS
 // const corsOptions = {
@@ -23,7 +23,7 @@ app.use(cors())
 
 app.use(express.json());
 
-app.use('/users', userRoutes);
+//app.use('/users', userRoutes);
 
 //check connection to mysql
 connection.connect((err) => {
@@ -42,58 +42,14 @@ app.post('/fetchAllTasks', fetchAllTasks)
 app.post('/completeTask', completeTask)
 app.post('/TaskAssigning', TaskAssigning)
 
-app.post('/users', async (req, res) => { //Endpoint to add friend
-  try {
-    const { username } = req.body;
-    const user = await User.create({ username });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
 
-app.get('/search', async (req, res) => { //endpoint to search
-  const query = req.query.query.toLowerCase();
-  try {
-    const users = await User.findAll({
-      where: {
-        username: {
-          [Sequelize.Op.like]: `%${query}%`,
-        },
-      },
-    });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+//Helping Terence Route vvvvvvvv
+const {searchUsers,addFriend} = require('./Friends');
+app.get('/searchUsers', searchUsers)
+app.post('/addFriend', addFriend)
 
-// Endpoint to fetch all users
-app.get('/users', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
-app.get('/searchUsers', async (req, res) => {
-  const searchTerm = req.query.username; // Get the search term from the query parameters
 
-  try {
-    const users = await User.findAll({
-      where: {
-        username: {
-          [Sequelize.Op.like]: `%${searchTerm}%`
-        }
-      }
-    });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 
 // CHatttttttttttttttttttttt
