@@ -162,7 +162,7 @@ const toggleChatPopout = (id) => {
               { (!ID || taskExpansion[todo.parentID])  && (
                 <li className='list-item' >
 
-                {todo.taskContent}
+                <span className={`taskContent ${todo.completed===false? "active" : "inactive"}`}>{todo.taskContent}</span>
                 <div>
                 <small className='createdBy'>created by {todo.username}</small>
                 
@@ -178,7 +178,6 @@ const toggleChatPopout = (id) => {
                   {todo.completed===false 
                   ? (<button onClick={() => clickcompleted(todo.id)} className='completed-button'> completed </button>)
                   :(<button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>)
-
                   }
 
                   {/* adding SUBTASK */}
@@ -194,11 +193,11 @@ const toggleChatPopout = (id) => {
 
                   {/* POPOUT Assigning Task to friend */}
                   <div>
-                    <button onClick={()=> toggleAssignTaskPopOut(todo.id)} className='toggleAssignTaskPopOut'>
+                    <button onClick={()=> toggleAssignTaskPopOut(todo.id)} className='toggleAssignTaskPopOut' >
                       <FontAwesomeIcon icon={faUsers} />
                     </button>
                     {AssignTaskPopoutstate[todo.id] && 
-                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username}/>
+                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username} onRefresh={()=>setRefresh(!refresh)}/>
                     }
                   </div>
 

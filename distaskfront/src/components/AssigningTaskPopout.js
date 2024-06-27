@@ -3,7 +3,7 @@ import "./Popout.css"
 import "./AssigningTaskPopout.css"
 import axios from "axios";
 
-function AssigningTaskPopout ({onClose, taskid, creator}) {
+function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
     const [refresh,setRefresh] = useState(false)
     const [currentSection, setCurrentSection] = useState("addPeople") //addPeople or assign
     const username = sessionStorage.getItem('username')
@@ -49,6 +49,7 @@ function AssigningTaskPopout ({onClose, taskid, creator}) {
 
         setTaskAssignedtoYOU(taskAssignedPpl.includes(username))
         console.log("task assigned to you:" + taskAssignedtoYOU)
+        onRefresh();
     },[friendList, taskParticipants,refresh, taskAssignedPpl])
 
 

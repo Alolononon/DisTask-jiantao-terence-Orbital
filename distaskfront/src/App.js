@@ -22,8 +22,8 @@ function App() {
         <Routes>
         <Route path="/loginpage" element={<LoginPage />} />
         <Route path="/" element={<PrivateRoute component={TodoList} />} />
-        <Route path="/about" element={<PrivateRoute component={About} />} />
-        <Route path="/contact" element={<PrivateRoute component={Contact} />} />
+        <Route path="/about" element={< About/>} />
+        <Route path="/contact" element={<Contact/>} />
         <Route path="/friends" element={<PrivateRoute component={Friends}/>}/>
         <Route path="/addfriend" element={<PrivateRoute component={AddFriend}/>}/>
           {/* <Route exact path="/Testing" element={<Testing />} />

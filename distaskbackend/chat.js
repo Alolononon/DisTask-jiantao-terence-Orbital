@@ -19,7 +19,7 @@ const chat = (app) => {
     },
     });
     io.on("connection", (socket)=> {
-        console.log(`user Connected: ${socket.id}`);
+        //console.log(`user Connected: ${socket.id}`);
         socket.on("join_room", (data)=> {
             socket.join(data)
             console.log("loaded messages from database")
