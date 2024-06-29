@@ -60,12 +60,29 @@
 
 // export default AddFriend;
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function AddFriend() {
   const [friendUsername, setFriendUsername] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [incomingRequests, setIncomingRequests] = useState([]);
+
+  useEffect(() => {
+    // Fetch incoming friend requests
+    const fetchIncomingRequests = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/incomingRequests', {
+          params: {userId: sessionStorage.getItem('username')}
+        });
+        setIncomingRequests(response.data.requests);
+      } catch (error) {
+        console.error('Error fetching incoming requests:', error);
+      }
+    };
+    fetchIncomingRequests();
+  }, []);
+
 
   const handleUsernameChange = async (event) => {
     const username = event.target.value;
@@ -113,6 +130,22 @@ function AddFriend() {
     }
   };
 
+  // New thing added delete this comment when checked
+  const handleAcceptFriend = async (friendId) => {
+    try {
+      const response = await axios.post('http://localhost:5000/acceptFriend', {
+        userId: sessionStorage.getItem('username'),
+        friendId
+      });
+      console.log('Friend request accepted:', response.data);
+      // Remove the accepted request from the list
+      setIncomingRequests(incomingRequests.filter(request => request.id !== friendId));
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  };
+
+  //text shown
   return (
     <div>
       <h1>Add a Friend</h1>
@@ -130,6 +163,15 @@ function AddFriend() {
           <li key={index}>
             {user}
             <button onClick={() => handleAddFriend(user)}>Add Friend</button>
+          </li>
+        ))}
+      </ul>
+      <h2>Incoming Requests</h2>
+      <ul>
+        {incomingRequests.map((request, index) => (
+          <li key={index}>
+            {request.username}
+            <button onClick={() => handleAcceptFriend(request.id)}>Accept</button>
           </li>
         ))}
       </ul>

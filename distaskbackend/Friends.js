@@ -37,6 +37,22 @@ const addFriend = async (req,res) => {
 }
 }
 
+const acceptFriend = async (req, res) => {
+  const {userId, friendId} = req.body;
+  console.log(friendId, userId);
+  try {
+    const query = 'UPDATE sakila.friends (user_id, friend_id, status) VALUES (?, ?, ?)';
+    connection.query(query, [userId, friendId, 'accepted'], (error, result) => {
+      if (error) throw error;
+      return res.json({result});
+    });
+  } catch (error) {
+    console.error('Error accepting friend request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
-module.exports = {searchUsers, addFriend};
+
+
+module.exports = {searchUsers, addFriend, acceptFriend};
