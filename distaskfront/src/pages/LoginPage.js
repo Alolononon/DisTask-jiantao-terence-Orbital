@@ -104,6 +104,7 @@ function LoginPage() {
   return (
 
     <div className="container">
+      <title>DisTask</title>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>

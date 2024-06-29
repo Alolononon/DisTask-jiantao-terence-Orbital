@@ -62,35 +62,49 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import "./AddFriend.css"
 
 function AddFriend() {
   const [friendUsername, setFriendUsername] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
+  const [outcomingRequests, setOutcomingRequests] = useState([]);
+  const [refresh, setRefresh] = useState(false)
+  const username = sessionStorage.getItem('username');
+  const [friendlist, setFriendList] = useState([])
 
+  //fetch data
   useEffect(() => {
-    // Fetch incoming friend requests
     const fetchIncomingRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/incomingRequests', {
+        // Fetch incoming friend requests
+        const response = await axios.post('http://localhost:5000/fetchfrienddata', {
           params: {userId: sessionStorage.getItem('username')}
         });
-        setIncomingRequests(response.data.requests);
+        setIncomingRequests(response.data.friend_request_received)
+        //console.log(incomingRequests)
+        setOutcomingRequests(response.data.friend_request_sent)
+        //console.log(outcomingRequests)
+
+        //find friendlist
+        const response1 = await axios.post('http://localhost:5000/friendlist', {username})
+        setFriendList(response1.data.friends)
+
       } catch (error) {
         console.error('Error fetching incoming requests:', error);
       }
     };
     fetchIncomingRequests();
-  }, []);
+  }, [searchResults,friendUsername, refresh]);
 
-
+  //for searching friend request
   const handleUsernameChange = async (event) => {
-    const username = event.target.value;
-    setFriendUsername(username);
+    const searching = event.target.value;
+    setFriendUsername(searching);
 
-    if (username.trim() !== '') {
+    if (searching.trim() !== '') {
       try {
-        const response = await axios.get(`http://localhost:5000/searchUsers?username=${username}`);
+        const response = await axios.get(`http://localhost:5000/searchUsers?searching=${searching}&username=${username}`);
         setSearchResults(response.data.searched);
         
       } catch (error) {
@@ -100,13 +114,10 @@ function AddFriend() {
       setSearchResults([]);
     }
   };
-
   const handleSearchUsers = async () => {
     if (friendUsername.trim() !== '') {
-      console.log("runnn")
-      console.log(friendUsername)
       try {
-        const response = await axios.get(`http://localhost:5000/searchUsers?username=${friendUsername}`);
+        const response = await axios.get(`http://localhost:5000/searchUsers?searching=${friendUsername}&username=${username}`);
         setSearchResults(response.data.searched);
       } catch (error) {
         console.error('Error searching users:', error);
@@ -116,11 +127,12 @@ function AddFriend() {
     }
   };
 
+  // SENDING FRIEND REQUEST
   const handleAddFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/addFriend', {
-        userId: sessionStorage.getItem('username'), // Replace with actual logged-in user ID
-        friendUsername: friendId // Assuming friendId is the actual ID of the user selected from search
+        userId: sessionStorage.getItem('username'), 
+        friendUsername: friendId 
       });
       console.log('Friend added:', response.data);
       setFriendUsername('');
@@ -130,6 +142,8 @@ function AddFriend() {
     }
   };
 
+
+
   // New thing added delete this comment when checked
   const handleAcceptFriend = async (friendId) => {
     try {
@@ -137,13 +151,24 @@ function AddFriend() {
         userId: sessionStorage.getItem('username'),
         friendId
       });
-      console.log('Friend request accepted:', response.data);
-      // Remove the accepted request from the list
-      setIncomingRequests(incomingRequests.filter(request => request.id !== friendId));
+      setRefresh(!refresh)
+      //console.log('Friend request accepted:', response.data);
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
   };
+
+  const handleDeclineFriend = async (friendId) => {
+    try {
+      const response = await axios.post('http://localhost:5000/declineFriend', {
+        userId: sessionStorage.getItem('username'),
+        friendId
+      });
+      setRefresh(!refresh)
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  }
 
   //text shown
   return (
@@ -158,20 +183,26 @@ function AddFriend() {
         />
         <button onClick={handleSearchUsers}>Search</button>
       </div>
-      <ul>
+      <ul className='friend_list'>
         {searchResults.map((user, index) => (
-          <li key={index}>
-            {user}
-            <button onClick={() => handleAddFriend(user)}>Add Friend</button>
+          <li key={index} className='users_item'>
+            <span className='friendname'> {user} </span>
+            {friendlist.includes(user)
+            ? (<button disabled className='disabled_button'>Friend</button>)
+            : incomingRequests.includes(user) || outcomingRequests.includes(user)
+            ? (<button disabled className='disabled_button'> Pending</button>)
+            : (<button onClick={() => handleAddFriend(user)}>Add Friend</button>)
+          }
           </li>
         ))}
       </ul>
       <h2>Incoming Requests</h2>
-      <ul>
-        {incomingRequests.map((request, index) => (
-          <li key={index}>
-            {request.username}
-            <button onClick={() => handleAcceptFriend(request.id)}>Accept</button>
+      <ul className='friend_list'>
+        {incomingRequests.map((user, index) => (
+          <li key={index} className='users_item'>
+            <span className='friendname'> {user} </span>
+            <button onClick={() => handleAcceptFriend(user)}>Accept</button>
+            <button onClick={()=> handleDeclineFriend(user)}>Decline</button>
           </li>
         ))}
       </ul>

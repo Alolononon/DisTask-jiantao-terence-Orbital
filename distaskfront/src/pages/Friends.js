@@ -1,27 +1,36 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; //some popular js library i found that is needed :O
+import './AddFriend.css'
 
 const Friends = () => {
-  const [users, setUsers] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const username = sessionStorage.getItem('username');
+
 
   useEffect(() => {
-    // Fetch users from the backend
-    axios.get('http://localhost:5000/users')
-      .then(response => {
-        setUsers(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the users!', error);
-      });
+    // Fetch friendlist from the backend
+    const fetchfriendlist = async () => {
+      try{
+        const response = await axios.post('http://localhost:5000/friendlist', {
+          username
+        })
+        setFriends(response.data.friends)
+      }catch(err){
+        console.error(err)
+      }
+    }
+    fetchfriendlist();
   }, []);
+
+    
 
   return (
     <div>
       <h1>Friends List</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.username}</li>
+      <ul className='friend_list'>
+        {friends.map((user,index) => (
+          <li key={index} className='users_item'>{user}</li>
         ))}
       </ul>
     </div>

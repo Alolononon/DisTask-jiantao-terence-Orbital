@@ -13,7 +13,10 @@ import AddFriend from './pages/AddFriend';
 
 function App() {
 
-  
+
+  useEffect(() => {
+      document.title = 'DisTask';
+    }, []);
 
   return (
     <div>      

@@ -261,6 +261,7 @@ const toggleChatPopout = (id) => {
       </div>
 
       <div>
+        {/* incomplete Taskkksss----------------------- */}
         {renderTodoComponent(null,AllTasks, "incomplete")}
 
 
@@ -269,16 +270,6 @@ const toggleChatPopout = (id) => {
           {showCompleted ? 'Hide completed Tasks' : 'Show completed Tasks'}
         </button>
         {showCompleted && (
-          // <ul className='list'>
-          //   {CompletedTasks.map((todo) => (
-          //     <li className='list-item' key={todo.id}>
-          //       {todo.taskContent}
-          //       <small className='createdBy'>created by {todo.username}</small>
-          //       <button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>
-          //     </li>
-          //   ))}
-          // </ul>
-
           renderTodoComponent(null, AllTasks, "completed")
         )}
       </div>

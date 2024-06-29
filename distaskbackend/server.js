@@ -44,10 +44,13 @@ app.post('/TaskAssigning', TaskAssigning)
 
 
 //Helping Terence Route vvvvvvvv
-const {searchUsers,addFriend} = require('./Friends');
+const {searchUsers,addFriend, fetchfrienddata, acceptFriend, friendlist, declineFriend} = require('./Friends');
 app.get('/searchUsers', searchUsers)
 app.post('/addFriend', addFriend)
-
+app.post('/fetchfrienddata', fetchfrienddata)
+app.post('/acceptFriend', acceptFriend)
+app.post('/friendlist', friendlist)
+app.post('/declineFriend', declineFriend)
 
 
 

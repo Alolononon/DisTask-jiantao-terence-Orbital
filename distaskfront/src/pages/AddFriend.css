@@ -1,0 +1,26 @@
+
+.friend_list{
+    list-style-type: none;
+    padding: 0;
+}
+
+.users_item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 30px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.friendname{
+    flex: 1;
+}
+
+.disabled_button{
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  
+}
