@@ -1,4 +1,3 @@
-
 .friend_list{
     list-style-type: none;
     padding: 0;
@@ -16,13 +15,6 @@
 
 .friendname{
     flex: 1;
-}
-
-.disabled_button{
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-  
 }
 
 button {

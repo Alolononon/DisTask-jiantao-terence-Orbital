@@ -61,10 +61,6 @@ nav ul li a:hover{
     overflow-wrap: break-word; /* Ensure text wraps within the box */
 }
 
-
-.username{
-
-}
 .logoutButton{
     margin: 0 10px;
 }

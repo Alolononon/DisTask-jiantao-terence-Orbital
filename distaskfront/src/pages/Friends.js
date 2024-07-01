@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; //some popular js library i found that is needed :O
-import './AddFriend.css'
+import './Friends.css'
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
