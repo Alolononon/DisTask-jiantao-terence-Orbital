@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 5000;
+
 const cors = require('cors');
-
-const connection = require('./db');
-const loginController = require('./login');
-const NewTask = require('./NewTask');
-const fetchAllTasks = require('./fetchAllTasks')
-const completeTask = require('./completeTask')
-const TaskAssigning = require('./TaskAssigning')
-
+const connection = require('./components/db');
+const loginController = require('./components/login');
+const NewTask = require('./components/NewTask');
+const fetchAllTasks = require('./components/fetchAllTasks')
+const completeTask = require('./components/completeTask')
+const TaskAssigning = require('./components/TaskAssigning')
+const bodyParser = require('body-parser');
 
 // //enable CORS
 // const corsOptions = {
@@ -19,9 +20,11 @@ const TaskAssigning = require('./TaskAssigning')
 // };
 // app.use(cors(corsOptions));
 
+// Enable CORS for all origins
 app.use(cors())
 
 app.use(express.json());
+app.use(bodyParser.json());
 
 //app.use('/users', userRoutes);
 
@@ -34,7 +37,7 @@ connection.connect((err) => {
   console.log('Connected to the database as ID ' + connection.threadId);
 });                                                                                                                                                                                                            
 
-  
+app.get("/", (req, res) => res.send("Express on Vercel"));
 // Route to handle data received from frontend
 app.post('/login', loginController); 
 app.post('/NewTask', NewTask);
@@ -44,7 +47,7 @@ app.post('/TaskAssigning', TaskAssigning)
 
 
 //Helping Terence Route vvvvvvvv
-const {searchUsers,addFriend, fetchfrienddata, acceptFriend, friendlist, declineFriend} = require('./Friends');
+const {searchUsers,addFriend, fetchfrienddata, acceptFriend, friendlist, declineFriend} = require('./components/Friends');
 app.get('/searchUsers', searchUsers)
 app.post('/addFriend', addFriend)
 app.post('/fetchfrienddata', fetchfrienddata)
@@ -52,29 +55,22 @@ app.post('/acceptFriend', acceptFriend)
 app.post('/friendlist', friendlist)
 app.post('/declineFriend', declineFriend)
 
-
-
-
-// CHatttttttttttttttttttttt
-const chat = require('./chat') ;
-const server = chat(app)
-
-server.listen(5000, ()=> {
-  console.log("chat server listening on 5000")
-})
-
-
-
-
-
-
-
-
-
  
 
 
+// CHatttttttttttttttttttttt      SOCKET.IO
+const chat = require('./components/chat') ;
+const server = chat(app)
+server.listen(PORT, ()=> {
+  console.log("chat server listening on ${PORT}")
+})
 
+ 
+// // NEWWWWW CHATTTTTTTTTTTTTTTTTT
+// const {chat, chat_sendmessage} = require('./components/chat') ;
+// app.get('/events/:taskid', chat)
+// app.post('/send_message', chat_sendmessage)
 
-// app.listen(5000, ()=> {console.log("Server started on port 5000") })
+//app.listen(5000, ()=> {console.log("Server started on port 5000") })
 
+ 

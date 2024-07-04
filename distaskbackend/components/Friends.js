@@ -1,7 +1,6 @@
 // routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const {User, Friend} = require('./models');
 const connection = require("./db");
 
 

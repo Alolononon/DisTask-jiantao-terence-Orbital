@@ -109,7 +109,7 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
             <div>
             {  /* { ADDING PEOPLE HERE VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV */
                 (currentSection==="addPeople") && (
-                    <div>
+                    <div className="whole_list">
                         <strong>Users Added in this Task</strong>
                         <ul className="participant-list">
                             {taskParticipants.map((participant, index) => (
@@ -170,7 +170,7 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
 
             {  /* ASSIGNING PEOPLE HERE VVVVVVVVVVVVVVVVVVVVVVVVVVVVV    */
                 (currentSection==="assign") && (
-                    <div>
+                    <div className="whole_list">
                         <strong>Users Assigned</strong>
                         <ul className="participant-list">
                             {taskAssignedPpl.map((participant,index) => (

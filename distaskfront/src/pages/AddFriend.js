@@ -1,65 +1,3 @@
-
-
-// import React, { useState } from 'react';
-// import axios from 'axios';
-
-// function AddFriend() {
-//   const [friendUsername, setFriendUsername] = useState('');
-//   const [searchResults, setSearchResults] = useState([]);
-
-//   const handleUsernameChange = async (event) => {
-//     const username = event.target.value;
-//     setFriendUsername(username);
-
-//     if (username.trim() !== '') {
-//       try {
-//         const response = await axios.get(`http://localhost:5000/searchUsers?username=${username}`);
-//         setSearchResults(response.data);
-//       } catch (error) {
-//         console.error('Error searching users:', error);
-//       }
-//     } else {
-//       setSearchResults([]);
-//     }
-//   };
-
-//   const handleAddFriend = async (friendId) => {
-//     try {
-//       const response = await axios.post('http://localhost:5000/addFriend', {
-//         userId: sessionStorage.getItem('token'), // Replace with actual logged-in user ID
-//         friendUsername: friendId // Assuming friendId is the actual ID of the user selected from search
-//       });
-//       console.log('Friend added:', response.data);
-//       setFriendUsername('');
-//       setSearchResults([]);
-//     } catch (error) {
-//       console.error('Error adding friend:', error);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Add a Friend</h1>
-//       <input
-//         type="text"
-//         value={friendUsername}
-//         onChange={handleUsernameChange}
-//         placeholder="Search for a friend"
-//       />
-//       <ul>
-//         {searchResults.map((user) => (
-//           <li key={user.id}>
-//             {user.username}
-//             <button onClick={() => handleAddFriend(user.id)}>Add Friend</button>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default AddFriend;
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./AddFriend.css"
@@ -79,6 +17,7 @@ function AddFriend() {
       try {
         // Fetch incoming friend requests
         const response = await axios.post('http://localhost:5000/fetchfrienddata', {
+        //const response = await axios.post('https://distask-backend.vercel.app/fetchfrienddata', {
           params: {userId: sessionStorage.getItem('username')}
         });
         setIncomingRequests(response.data.friend_request_received)
@@ -88,6 +27,7 @@ function AddFriend() {
 
         //find friendlist
         const response1 = await axios.post('http://localhost:5000/friendlist', {username})
+        //const response1 = await axios.post('https://distask-backend.vercel.app/friendlist', {username})
         setFriendList(response1.data.friends)
 
       } catch (error) {
@@ -105,6 +45,7 @@ function AddFriend() {
     if (searching.trim() !== '') {
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?searching=${searching}&username=${username}`);
+        //const response = await axios.get(`https://distask-backend.vercel.app/searchUsers?searching=${searching}&username=${username}`);
         setSearchResults(response.data.searched);
         
       } catch (error) {
@@ -118,6 +59,7 @@ function AddFriend() {
     if (friendUsername.trim() !== '') {
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?searching=${friendUsername}&username=${username}`);
+        //const response = await axios.get(`https://distask-backend.vercel.app/searchUsers?searching=${friendUsername}&username=${username}`);
         setSearchResults(response.data.searched);
       } catch (error) {
         console.error('Error searching users:', error);
@@ -131,6 +73,7 @@ function AddFriend() {
   const handleAddFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/addFriend', {
+      //const response = await axios.post('https://distask-backend.vercel.app/addFriend', {
         userId: sessionStorage.getItem('username'), 
         friendUsername: friendId 
       });
@@ -148,6 +91,7 @@ function AddFriend() {
   const handleAcceptFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/acceptFriend', {
+      //const response = await axios.post('https://distask-backend.vercel.app/acceptFriend', {
         userId: sessionStorage.getItem('username'),
         friendId
       });
@@ -161,6 +105,7 @@ function AddFriend() {
   const handleDeclineFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/declineFriend', {
+      //const response = await axios.post('https://distask-backend.vercel.app/declineFriend', {
         userId: sessionStorage.getItem('username'),
         friendId
       });

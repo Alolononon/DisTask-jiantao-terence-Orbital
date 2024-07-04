@@ -1,10 +1,9 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
-import Testing from './pages/Testing';
 import { useEffect } from 'react';
 import PrivateRoute from './components/PrivateRoute';
 import TodoList from './pages/TodoList';
@@ -42,3 +41,12 @@ function App() {
 export default App;
 
 
+
+
+
+// for json package
+// "homepage": "https://alolononon.github.io",
+// "name": "distaskfront",
+// "version": "0.1.0",
+// "proxy": "https://distask-backend.vercel.app",
+// "private": true,

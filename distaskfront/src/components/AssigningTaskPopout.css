@@ -15,6 +15,11 @@
   color: black; /* Optional: black text for better contrast */
 }
 
+.whole_list{
+  max-height: 330px;
+  overflow-y: auto;
+}
+
 
 .participant-list {
     list-style:circle;

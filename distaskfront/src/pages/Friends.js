@@ -13,6 +13,7 @@ const Friends = () => {
     const fetchfriendlist = async () => {
       try{
         const response = await axios.post('http://localhost:5000/friendlist', {
+        //const response = await axios.post('https://distask-backend.vercel.app/friendlist', {
           username
         })
         setFriends(response.data.friends)

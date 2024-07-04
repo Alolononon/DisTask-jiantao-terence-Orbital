@@ -39,7 +39,7 @@ function LoginPage() {
         body: JSON.stringify( data ), // Your data object to send
       });
       const responseData = await response.json();
-      console.log(responseData); 
+      //console.log(responseData); 
       
       if(response.ok){
         //login or sign up is successful===================================

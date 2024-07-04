@@ -21,12 +21,12 @@ const username = sessionStorage.getItem('username')
 const addNewTask = async (parentID, taskContent, participants) => {
   
   try {
-    if(parentID){
-
+    if(!Array.isArray(participants)) {
+      participants = [participants]
     }
     
-    // await axios.post('http://distask-backend.vercel.app:5000/NewTask', {username, taskContent, parentID})
-     await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID, participants})
+    //await axios.post('http://distask-backend.vercel.app/NewTask', {username, taskContent, parentID})
+    await axios.post('http://localhost:5000/NewTask', {username, taskContent, parentID, participants})
     setRefresh(!refresh)
   } catch (error) {
     console.error('Error adding new task: ', error)
@@ -44,12 +44,14 @@ const addNewTask = async (parentID, taskContent, participants) => {
 useEffect(()=> {
   const fetchTodos = async () => {
     try{
-      // const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
+      //const response = await axios.post('http://distask-backend.vercel.app:5000/fetchAllTasks', {username})
       const response = await axios.post('http://localhost:5000/fetchAllTasks', {username})
-      console.log(response.error)
+      //console.log(response.data.tasks)
       // setIncompletedTasks(response.data.incompleteTasks)
       // setCompletedTasks(response.data.completedTasks)
       setAllTasks(response.data.tasks)
+      
+      return
       } catch (error) {
         console.error('Error feetching ToDos from database: ', error)
     }
@@ -73,6 +75,7 @@ const toggleShowCompletedTasks = () => {
   const clickcompleted = async (id) => {
     try{
       await axios.post('http://localhost:5000/completeTask', {id})
+      //await axios.post('https://distask-backend.vercel.app/completeTask', {id})
       setRefresh(!refresh)
   } catch (error) {
     console.error('error updating completed task in ToDos: ', error)
@@ -91,7 +94,7 @@ const toggleShowCompletedTasks = () => {
   
 const handleAddNewSubTask = async (e, id, participants) => {
   if(e.key === 'Enter' && newSubTodo[id].trim()) {
-    await addNewTask(id, newSubTodo[id], participants);
+    await addNewTask(id, newSubTodo[id], JSON.parse(participants));
     handleSubTaskInputChange(id,'');
   }
   }
@@ -130,24 +133,28 @@ const toggleChatPopout = (id) => {
     const parentTaskIds = new Set(listofTaskssss.map(task => task.id));
     
     let tasks = [];
-    if(ID===null){
+    if(!ID){
       if(status==="incomplete"){
-        tasks = listofTaskssss.filter((task) =>  task.completed===false && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
+        tasks = listofTaskssss.filter((task) =>  !task.completed && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
+        //tasks = listofTaskssss.filter((task)=> !task.completed && (task.parentID === ID || !parentTaskIds.has(task.parentID)))
       } else if (status==="completed") {
-        tasks = listofTaskssss.filter((task) =>  task.completed===true && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
+        tasks = listofTaskssss.filter((task) =>  task.completed && (task.parentID === ID || !parentTaskIds.has(task.parentID)));
       }
     } else {
       tasks = listofTaskssss.filter((task) =>   task.parentID === ID);
     }
+
     
     if(tasks.length===0){
       return null;
     }
-    
+
+
+
     return (
       // {/* incompleted Task++++++++++++++++++++++++++++++ */}
       <div>
-        { (ID!==null) && (
+        { ID && (
           <span onClick={()=>toggleTaskExpansion(ID)} className='toggle-span'>
             {taskExpansion[ID] ? '▼' : '▶'}
           </span>
@@ -162,7 +169,7 @@ const toggleChatPopout = (id) => {
               { (!ID || taskExpansion[todo.parentID])  && (
                 <li className='list-item' >
 
-                <span className={`taskContent ${todo.completed===false? "active" : "inactive"}`}>{todo.taskContent}</span>
+                <span className={`taskContent ${!todo.completed? "active" : "inactive"}`}>{todo.taskContent}</span>
                 <div>
                 <small className='createdBy'>created by {todo.username}</small>
                 
@@ -175,9 +182,9 @@ const toggleChatPopout = (id) => {
 
                 
                 <div className='Task2ndLayer'>
-                  {todo.completed===false 
+                  {!todo.completed
                   ? (<button onClick={() => clickcompleted(todo.id)} className='completed-button'> completed </button>)
-                  :(<button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>)
+                  : (<button onClick={() => clickcompleted(todo.id)}> {todo.completed ? "incomplete" : 'completed'} </button>)
                   }
 
                   {/* adding SUBTASK */}
@@ -197,7 +204,7 @@ const toggleChatPopout = (id) => {
                       <FontAwesomeIcon icon={faUsers} />
                     </button>
                     {AssignTaskPopoutstate[todo.id] && 
-                      <AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username} onRefresh={()=>setRefresh(!refresh)}/>
+                      (<AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username} onRefresh={()=>setRefresh(!refresh)}/>)
                     }
                   </div>
 
@@ -221,7 +228,7 @@ const toggleChatPopout = (id) => {
               
             
             <div style={{marginLeft:'20px'}} >
-            {renderTodoComponent(todo.id, listofTaskssss)}
+            {renderTodoComponent(todo.id, listofTaskssss, status)}
             </div>
 
 
@@ -255,7 +262,7 @@ const toggleChatPopout = (id) => {
           placeholder="Add a task"
           onKeyDown={(e) => handleKeyPress(e)}
         />
-        <button onClick={()=> addNewTask(null, newTodo)} disabled={!newTodo.trim()} className='addNewTaskbutton'>
+        <button onClick={()=> addNewTask(null, newTodo, username)} disabled={!newTodo.trim()} className='addNewTaskbutton'>
           Add
         </button>
       </div>
