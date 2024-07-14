@@ -9,6 +9,7 @@ const NewTask = require('./components/NewTask');
 const fetchAllTasks = require('./components/fetchAllTasks')
 const completeTask = require('./components/completeTask')
 const TaskAssigning = require('./components/TaskAssigning')
+const calender = require('./components/calender')
 const bodyParser = require('body-parser');
 
 // //enable CORS
@@ -44,6 +45,7 @@ app.post('/NewTask', NewTask);
 app.post('/fetchAllTasks', fetchAllTasks)
 app.post('/completeTask', completeTask)
 app.post('/TaskAssigning', TaskAssigning)
+app.post('/calender', calender)
 
 
 //Helping Terence Route vvvvvvvv
@@ -55,21 +57,47 @@ app.post('/acceptFriend', acceptFriend)
 app.post('/friendlist', friendlist)
 app.post('/declineFriend', declineFriend)
 
+
  
 
 
 // CHatttttttttttttttttttttt      SOCKET.IO
 const chat = require('./components/chat') ;
-const server = chat(app)
+// const server = chat(app)
+
+
+
+const http = require("http");
+const {Server} = require("socket.io");
+const server = http.createServer(app)
+const io = new Server(server, {
+cors: {
+    origin:"http://localhost:3000",
+    methods:["GET", "POST"],
+},
+});
+
+chat(io);
+
+
 server.listen(PORT, ()=> {
-  console.log("chat server listening on ${PORT}")
+  console.log(`chat server listening on ${PORT}`)
 })
 
- 
+
 // // NEWWWWW CHATTTTTTTTTTTTTTTTTT
 // const {chat, chat_sendmessage} = require('./components/chat') ;
 // app.get('/events/:taskid', chat)
 // app.post('/send_message', chat_sendmessage)
+
+
+ 
+
+
+
+
+
+
 
 //app.listen(5000, ()=> {console.log("Server started on port 5000") })
 

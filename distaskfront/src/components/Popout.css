@@ -1,6 +1,6 @@
 .popout{
     position: absolute;
-    transform: translateY(-35px);
+    transform: translateY(-35px) translateX(-250px);
     height: 400px;
     width: 300px;
     background-color: aliceblue;

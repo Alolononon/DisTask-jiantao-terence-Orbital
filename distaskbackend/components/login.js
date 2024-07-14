@@ -11,7 +11,7 @@ const loginController = (req, res) => {
     const { username, password, confirmPassword, isLogin } = receivedData;
   
     // checking username and password received from frontend
-    const checkQuery = 'SELECT * FROM accounts WHERE username = ?';
+    const checkQuery = 'SELECT * FROM accounts WHERE BINARY username = ?';
     connection.query(checkQuery, [username], (err, results)=> {
       if(err) {
         console.error('Error checking username:', err);
@@ -42,7 +42,7 @@ const loginController = (req, res) => {
         }
       } else { 
       // LOGINING IN
-        const query = 'SELECT * FROM sakila.accounts WHERE username = ? AND password = ?';
+        const query = 'SELECT * FROM sakila.accounts WHERE BINARY username = ? AND BINARY password = ?';
         connection.query(query, [username, password], (err, results)=> {
           if (results.length === 1) {
             // User found, login successful==================================

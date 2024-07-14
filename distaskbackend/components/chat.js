@@ -104,15 +104,10 @@ const connection = require('./db');
 
 
 // socket.IO method (not in use)
-const chat = (app) => {
+const chat = (io) => {
     // CHATTTTTTTTTTT
-    const server = http.createServer(app)
-    const io = new Server(server, {
-    cors: {
-        origin:"http://localhost:3000",
-        methods:["GET", "POST"],
-    },
-    });
+
+
     io.on("connection", (socket)=> {
         //console.log(`user Connected: ${socket.id}`);
         socket.on("join_room", (data)=> {
@@ -145,7 +140,7 @@ const chat = (app) => {
             console.log("message sent")
         })
     })
-    return server;
+    //return server;
 }
 
 module.exports = chat;

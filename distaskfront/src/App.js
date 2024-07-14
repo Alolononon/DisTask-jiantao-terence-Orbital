@@ -9,7 +9,7 @@ import PrivateRoute from './components/PrivateRoute';
 import TodoList from './pages/TodoList';
 import Friends from './pages/Friends';
 import AddFriend from './pages/AddFriend';
-
+import CalendarPage from './pages/Calendar';
 function App() {
 
 
@@ -28,6 +28,7 @@ function App() {
         <Route path="/contact" element={<Contact/>} />
         <Route path="/friends" element={<PrivateRoute component={Friends}/>}/>
         <Route path="/addfriend" element={<PrivateRoute component={AddFriend}/>}/>
+        <Route path="/calendar" element={<PrivateRoute component={CalendarPage}/> }/>
           {/* <Route exact path="/Testing" element={<Testing />} />
           <Route exact path="/About" element={<About />} />
           <Route exact path="/Contact" element={<Contact />} /> */}

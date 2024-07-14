@@ -17,7 +17,6 @@ function AddFriend() {
       try {
         // Fetch incoming friend requests
         const response = await axios.post('http://localhost:5000/fetchfrienddata', {
-        //const response = await axios.post('https://distask-backend.vercel.app/fetchfrienddata', {
           params: {userId: sessionStorage.getItem('username')}
         });
         setIncomingRequests(response.data.friend_request_received)
@@ -27,7 +26,6 @@ function AddFriend() {
 
         //find friendlist
         const response1 = await axios.post('http://localhost:5000/friendlist', {username})
-        //const response1 = await axios.post('https://distask-backend.vercel.app/friendlist', {username})
         setFriendList(response1.data.friends)
 
       } catch (error) {
@@ -45,7 +43,6 @@ function AddFriend() {
     if (searching.trim() !== '') {
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?searching=${searching}&username=${username}`);
-        //const response = await axios.get(`https://distask-backend.vercel.app/searchUsers?searching=${searching}&username=${username}`);
         setSearchResults(response.data.searched);
         
       } catch (error) {
@@ -59,7 +56,6 @@ function AddFriend() {
     if (friendUsername.trim() !== '') {
       try {
         const response = await axios.get(`http://localhost:5000/searchUsers?searching=${friendUsername}&username=${username}`);
-        //const response = await axios.get(`https://distask-backend.vercel.app/searchUsers?searching=${friendUsername}&username=${username}`);
         setSearchResults(response.data.searched);
       } catch (error) {
         console.error('Error searching users:', error);
@@ -73,7 +69,6 @@ function AddFriend() {
   const handleAddFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/addFriend', {
-      //const response = await axios.post('https://distask-backend.vercel.app/addFriend', {
         userId: sessionStorage.getItem('username'), 
         friendUsername: friendId 
       });
@@ -91,7 +86,6 @@ function AddFriend() {
   const handleAcceptFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/acceptFriend', {
-      //const response = await axios.post('https://distask-backend.vercel.app/acceptFriend', {
         userId: sessionStorage.getItem('username'),
         friendId
       });
@@ -105,7 +99,6 @@ function AddFriend() {
   const handleDeclineFriend = async (friendId) => {
     try {
       const response = await axios.post('http://localhost:5000/declineFriend', {
-      //const response = await axios.post('https://distask-backend.vercel.app/declineFriend', {
         userId: sessionStorage.getItem('username'),
         friendId
       });
@@ -118,15 +111,16 @@ function AddFriend() {
   //text shown
   return (
     <div>
-      <h1>Add a Friend</h1>
+      <h1 className='left-shift'>Add a Friend</h1>
       <div>
         <input
           type="text"
           value={friendUsername}
           onChange={handleUsernameChange}
           placeholder="Search for a friend"
+          className='left-shift'
         />
-        <button onClick={handleSearchUsers}>Search</button>
+        <button onClick={handleSearchUsers} className='left-shift'>Search</button>
       </div>
       <ul className='friend_list'>
         {searchResults.map((user, index) => (
@@ -141,13 +135,13 @@ function AddFriend() {
           </li>
         ))}
       </ul>
-      <h2>Incoming Requests</h2>
+      <h2 className='left-shift'>Incoming Requests</h2>
       <ul className='friend_list'>
         {incomingRequests.map((user, index) => (
           <li key={index} className='users_item'>
             <span className='friendname'> {user} </span>
-            <button onClick={() => handleAcceptFriend(user)}>Accept</button>
-            <button onClick={()=> handleDeclineFriend(user)}>Decline</button>
+            <button onClick={() => handleAcceptFriend(user)} className='right-shift'>Accept</button>
+            <button onClick={()=> handleDeclineFriend(user)}className='right-shift'>Decline</button>
           </li>
         ))}
       </ul>

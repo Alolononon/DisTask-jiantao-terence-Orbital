@@ -18,21 +18,30 @@ const fetchAllTasks = async (req, res) => {
         // });
         // res.status(200).json({ tasks});
 
-        const query = `SELECT * FROM todos WHERE JSON_CONTAINS(participants, '"${username}"')`;
+        const query = `SELECT * FROM todos WHERE JSON_CONTAINS(participants, '"${username}"') ORDER BY createdAt DESC;`;
         connection.query(query, (err, results) => {
             if (err) {
                 console.error('Error fetching tasks:', err);
                 res.status(500).json({ error: 'Failed to fetch tasks' });
             } 
-            const tasks = results.map(task => {
+            // let tasks = results.map(task => {
+            //     // Parse the participants field from JSON string to array
+            //     const parsedParticipants = JSON.parse(task.participants);
+            //     return {
+            //         ...task,
+            //         participants: parsedParticipants // Replace the participants field with the parsed array
+            //     };
+            // });
+            tasks = results.map(task => {
                 // Parse the participants field from JSON string to array
-                const parsedParticipants = JSON.parse(task.participants);
+                const parsedDueDate = JSON.parse(task.dueDate);
                 return {
                     ...task,
-                    participants: parsedParticipants // Replace the participants field with the parsed array
+                    dueDate: parsedDueDate // Replace the participants field with the parsed array
                 };
             });
-            return res.status(200).json({ tasks: results });
+
+            return res.status(200).json({ tasks });
             
         });
 

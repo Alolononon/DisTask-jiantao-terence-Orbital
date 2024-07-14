@@ -9,8 +9,24 @@
     padding: 10px;
 }
 
-.taskContent{
+.addNewTaskbutton{
+    padding: auto;
+    margin-bottom: 10px;
+}
 
+
+
+.Task-firstrow{
+    display: flex;
+    align-items: center;
+}
+.completed-button{
+    cursor:pointer;
+}
+
+
+.taskContent{
+    margin-left: 10px;
 }
 .taskContent.inactive{
     text-decoration: line-through;
@@ -20,11 +36,21 @@
     margin-right: 10px;
     font-size: 11px;
 }
+.TaskDueDate{
+    background-color:orange; 
+    font-size: 13px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    margin:0 5px;
+    cursor: pointer;
+}
 .AssignedToYou{
     background-color: #ffcccb; 
     font-size: 13px;
     padding: 2px 5px;
     border-radius: 5px;
+    margin:0 5px;
+    cursor: default;
 }
 
 .box {
@@ -34,33 +60,50 @@
 .footer{
     display: flex;
 }
-.addNewTaskbutton{
-    padding: auto;
-    margin-bottom: 10px;
-}
 
 .toggle-span{
     cursor: pointer;
+}
+.toggle-subtask-hideout{
+    cursor: pointer;
+    margin:0 20px;
 }
 
 .Task2ndLayer {
     display: flex;
     align-items: center; 
-    justify-content: flex-start;
+    margin-top: 10px;
+    justify-content: space-between;
+    
 }
-.completed-button{
-    margin-right: 10px; 
+
+
+
+
+.Adding-Subtask{
+    display: flex;
+    align-items: center; /* Align items vertically centered */
 }
-.Adding-Subtask {
+
+.ToggleEditTask, .toggleAssignTaskPopOut, .toggleChatPopout, .add_dueDate {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-top: 1%;
-    margin-right: 10px; 
+    margin-left: 10px;
+    
+    
 }
-.toggleAssignTaskPopOut{
-    margin-right: 10px; 
+
+
+.TaskLayer2ndright{
+    display: flex;
+    align-items: center; 
 }
-.toggleChatPopout{
-    margin-right: 10px; 
+
+.settingComponents{
+    display: flex;
+    align-items: center; 
+    margin-right: 10px;
+}
+.settingHideoutIcon{
+    cursor: pointer;
 }

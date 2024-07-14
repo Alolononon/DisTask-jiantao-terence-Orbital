@@ -5,7 +5,6 @@ import io from 'socket.io-client'
 import axios from "axios";
 
 const socket = io.connect("http://localhost:5000")
-//const socket = io.connect("https://distask-backend.vercel.app")
 
 
 function ChatPopout ({onClose, taskid, username}) {
