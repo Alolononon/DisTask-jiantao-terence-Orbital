@@ -34,4 +34,22 @@ const NewTask = async (req,res) => {
     }
 }
 
-module.exports = NewTask;
+const editingTask = (req,res)=> {
+    const {taskId,newTaskContent} = req.body
+    const query = 'UPDATE sakila.todos SET taskContent = ? WHERE id = ?'
+    connection.query(query,[newTaskContent,taskId], (err,result)=> {
+        if(err){
+            console.error('Error editing task: ' + err)
+            res.status(403).json({error: err.message})
+        } else{
+            console.log("task edited")
+            res.json({})
+        }
+
+    })
+}
+
+
+
+
+module.exports = {NewTask,editingTask};

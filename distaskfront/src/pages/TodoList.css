@@ -107,3 +107,7 @@
 .settingHideoutIcon{
     cursor: pointer;
 }
+.TaskEditingConfirmbutton:disabled{
+    background-color: grey;
+    cursor:not-allowed;
+}

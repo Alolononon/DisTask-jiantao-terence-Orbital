@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const connection = require('./components/db');
 const loginController = require('./components/login');
-const NewTask = require('./components/NewTask');
+const {NewTask,editingTask} = require('./components/NewTask');
 const fetchAllTasks = require('./components/fetchAllTasks')
 const completeTask = require('./components/completeTask')
 const TaskAssigning = require('./components/TaskAssigning')
@@ -46,6 +46,7 @@ app.post('/fetchAllTasks', fetchAllTasks)
 app.post('/completeTask', completeTask)
 app.post('/TaskAssigning', TaskAssigning)
 app.post('/calender', calender)
+app.post('/editingTask',editingTask)
 
 
 //Helping Terence Route vvvvvvvv

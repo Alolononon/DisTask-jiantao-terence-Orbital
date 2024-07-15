@@ -123,14 +123,25 @@ const TodoList = ({ userId }) => {
   const handleTaskEditing = (id,value, prevValue) => {
     setStoringEditingTask({
       ...storingEditingTask,
-      [id]: prevValue,
+      [id]: value
     })
-    console.log(prevValue)
-
-    
     return value;
   }
 
+  //handling task edited
+  const handleEditingTask = async (taskId, newTaskContent, oldTaskContent) =>{
+    if(newTaskContent && !(newTaskContent===oldTaskContent)){
+      try{
+        await axios.post('http://localhost:5000/editingTask', {taskId,newTaskContent })
+        setRefresh(!refresh)
+      }catch(err){
+        console.error(err)
+      }
+
+      toggleTaskEditing(taskId,oldTaskContent)
+      
+    }
+  }
 
 
   //TOGGLE SHIT ===========================================================
@@ -163,17 +174,17 @@ const TodoList = ({ userId }) => {
 
     //toggle Task Editing
     const [TaskEditing, setTaskEditing] = useState({})
-    const toggleTaskEditing = (id) => {
+    const toggleTaskEditing = (id,taskContent) => {
       setTaskEditing((prevStates) => ({
         ...prevStates,
         [id]: !prevStates[id],
       }));
-      if(TaskEditing[id]===true){
+      
         setStoringEditingTask( (prev)=> ({
           ...prev,
-          [id]: "idk"
+          [id]: taskContent
         }))
-      }
+      
     };
 
       
@@ -279,14 +290,24 @@ const TodoList = ({ userId }) => {
                         : <FontAwesomeIcon icon={faSquareCheck} size='xl' onClick={() => clickcompleted(todo.id)}/>
                     }
                     <span className={`taskContent ${!todo.completed? "active" : "inactive"}`}>
-                      {TaskEditing[todo.id] && 
-                        <input
-                          type='text'
-                          onChange={(e)=>handleTaskEditing(todo.id, e.target.value, todo.taskContent)}
-                          
-                        />
+                      {TaskEditing[todo.id] 
+                        ? (
+                          <div>
+                            <input
+                              type='text'
+                              onChange={(e)=>handleTaskEditing(todo.id, e.target.value, todo.taskContent)}
+                              value={storingEditingTask[todo.id]}
+                              onKeyDown={(e)=> {
+                                if(e.key === 'Enter'){
+                                  handleEditingTask(todo.id, storingEditingTask[todo.id], todo.taskContent)
+                                }
+                              }}
+                            />
+                            <button onClick={()=>handleEditingTask(todo.id, storingEditingTask[todo.id], todo.taskContent)} disabled={!storingEditingTask[todo.id] || storingEditingTask[todo.id]===todo.taskContent} className='TaskEditingConfirmbutton'>confirm</button>
+                          </div>
+                        )
+                        : <>{todo.taskContent}</>
                       }
-                      {todo.taskContent}
                     </span>
 
                   </div>
@@ -298,7 +319,7 @@ const TodoList = ({ userId }) => {
                       <span onClick={()=> toggleCalanderPopout(todo.id)}>Due on {todo.dueDate.isFullDay ? format(todo.dueDate.date, 'dd/MM/yyyy') : format(todo.dueDate.date, 'dd/MM/yyyy hh:mm a')}</span>
                       <FontAwesomeIcon icon={faXmark} onClick={()=>handleDeleteDueDate(todo.id)}/>
                     </span>}
-                    
+
                     { todo.usersAssigned && todo.usersAssigned.includes(username) && (
                       <span className='AssignedToYou'>Assigned To You</span>
                     ) }
@@ -361,7 +382,7 @@ const TodoList = ({ userId }) => {
                           {/* Editing the Task Text */}
                           
                           <div>
-                            <button className='ToggleEditTask' onClick={()=> toggleTaskEditing(todo.id)}>
+                            <button className='ToggleEditTask' onClick={()=> toggleTaskEditing(todo.id,todo.taskContent)}>
                               <FontAwesomeIcon icon={faPenToSquare} />
                             </button>
                           </div>
