@@ -100,7 +100,9 @@ export default function CalendarPage() {
     // compacting filtered tasks into a format for Big Calendarrrrr
     useEffect(()=> {
         setEvents(
-            filteredTasks.map((task) => ({
+            filteredTasks
+            .filter(task=> task.dueDate)
+            .map((task) => ({
                 title: task.taskContent,
                 allDay: task.dueDate.isFullDay,
                 start: new Date(task.dueDate.date),
@@ -109,6 +111,7 @@ export default function CalendarPage() {
             }))
         )
     },[AllTasks,filteredTasks])
+    
 
     
     // style for the events in the calendar
