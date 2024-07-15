@@ -71,7 +71,7 @@ import "./Navbar.css";
                     <a href="#!" onClick={() => getsettings("Friends")}>Friends</a>
                     <a href="#!" onClick={() => getsettings("AddFriend")}>Add Friends</a>
                     <a href="#!" onClick={() => getsettings("Calendar")}>Calendar</a>
-                    <a href="#!" onClick={() => getsettings("Contact")}>Contact</a>
+                    {/* <a href="#!" onClick={() => getsettings("Contact")}>Contact</a> */}
                     <a href="#!" onClick={() => getsettings("About")}>About</a>
                     {/* <a href="#!" onClick={() => getsettings("Logout")}>Logout</a> DOESN'T WORK AS OF YET*/} 
                   </div>
