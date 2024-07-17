@@ -11,7 +11,7 @@ const completeTask = require('./components/completeTask')
 const TaskAssigning = require('./components/TaskAssigning')
 const calender = require('./components/calender')
 const bodyParser = require('body-parser');
-
+const profile = require('./components/profile')
 // //enable CORS
 // const corsOptions = {
 //   origin: ['http://localhost', 'http://localhost:3000'], // Allow requests from both http://localhost and http://localhost:3000
@@ -47,6 +47,7 @@ app.post('/completeTask', completeTask)
 app.post('/TaskAssigning', TaskAssigning)
 app.post('/calender', calender)
 app.post('/editingTask',editingTask)
+app.post('/profile', profile)
 
 
 //Helping Terence Route vvvvvvvv

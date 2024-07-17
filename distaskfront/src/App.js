@@ -10,6 +10,7 @@ import TodoList from './pages/TodoList';
 import Friends from './pages/Friends';
 import AddFriend from './pages/AddFriend';
 import CalendarPage from './pages/Calendar';
+import ProfilePage from './pages/ProfilePage';
 function App() {
 
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/friends" element={<PrivateRoute component={Friends}/>}/>
         <Route path="/addfriend" element={<PrivateRoute component={AddFriend}/>}/>
         <Route path="/calendar" element={<PrivateRoute component={CalendarPage}/> }/>
+        <Route path="/profile" element={<PrivateRoute component={ProfilePage}/> }/>
           {/* <Route exact path="/Testing" element={<Testing />} />
           <Route exact path="/About" element={<About />} />
           <Route exact path="/Contact" element={<Contact />} /> */}

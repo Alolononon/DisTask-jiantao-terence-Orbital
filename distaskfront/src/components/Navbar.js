@@ -2,12 +2,13 @@
 import {React, useEffect,useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import axios from 'axios';
 
  function Navbar() {
 
    const navigate = useNavigate();
   const [loggedin, setLoggedin] = useState(!!sessionStorage.getItem('token'));
-
+  
   // Use useEffect to set up any side effects
   useEffect(() => {
     setLoggedin(!!sessionStorage.getItem('token'));
@@ -53,6 +54,32 @@ import "./Navbar.css";
     }
   };
 
+  const username = sessionStorage.getItem('username')
+  const [profilePic,setProfilePic] = useState({})
+  useEffect(()=>{
+    const fetchProfilePic = async () => {
+        try{
+            const formData = new FormData();
+            formData.append('username',username)
+            formData.append('action',"fetchProfilePhoto")
+            const response = await axios.post('/profile', formData, {
+                responseType: 'blob', 
+            });
+
+            const imageUrl = URL.createObjectURL(response.data);
+            setProfilePic(imageUrl)
+        }catch(err){
+            console.error('error fetching phrofile piture: ', err)
+        }
+    }
+    fetchProfilePic();
+},[])
+
+
+
+
+
+
     return(
       <div>
         <nav>
@@ -65,7 +92,11 @@ import "./Navbar.css";
               <li><p className="username">{sessionStorage.getItem('username')}</p></li>
               <li><button onClick={handleLogout} className="logoutButton">Logout</button></li>
               <li className="dropdown">
-                  <img src="/settings.png" alt="Settings" className="settings-icon" />
+                  {profilePic 
+                    ? <img src={profilePic} alt="Profile" className="settings-icon" />
+                    : <img src="/settings.png" alt="Settings" className="settings-icon" />
+                  }
+                  
                   <div className="dropdown-content">
                     <a href="#!" onClick={() => getsettings("Profile")}>Profile</a>
                     <a href="#!" onClick={() => getsettings("Friends")}>Friends</a>
@@ -84,7 +115,7 @@ import "./Navbar.css";
             <Link to="/" className="title">DisTask</Link>
             <ul>
               <li><Link to="/About">About</Link></li>
-              <li><Link to="/Contact">Contact</Link></li>
+              {/* <li><Link to="/Contact">Contact</Link></li> */}
               <li><Link to="/LoginPage">Login</Link></li>
               </ul>
             </>
