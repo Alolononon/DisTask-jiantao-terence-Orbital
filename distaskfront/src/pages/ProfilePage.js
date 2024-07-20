@@ -16,10 +16,13 @@ const ProfilePage = () => {
                 formData.append('username',username)
                 formData.append('action',"fetchProfilePhoto")
                 const response = await axios.post('/profile', formData, {
-                    responseType: 'blob', 
+                    responseType: 'json', 
                 });
     
-                const imageUrl = URL.createObjectURL(response.data);
+                const binaryData = new Uint8Array(response.data.profilePic.data);
+                const base64String = btoa(String.fromCharCode(...binaryData));
+                const imageUrl = `data:image/jpeg;base64,${base64String}`;
+                
                 setUser(prevState => ({
                     ...prevState,
                     profilePic: imageUrl
@@ -79,9 +82,9 @@ const ProfilePage = () => {
         <div>
 
 
-            {user.profilePic 
+            {user.profilePic
                 ?   <div className="profile-pic-container">
-                        <img src={user.profilePic} alt="Profile" />
+                        <img src={user.profilePic } alt="Profile" />
                     </div>
                 :   <div className="profile-pic-container">
                         no profile picture

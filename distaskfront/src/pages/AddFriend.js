@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./AddFriend.css"
+import fetchMultipleProfilePic from '../components/FetchMultipleProfilePic';
 
 function AddFriend() {
   const [friendUsername, setFriendUsername] = useState('');
@@ -108,7 +109,43 @@ function AddFriend() {
     }
   }
 
-  //text shown
+
+
+
+
+
+
+
+
+
+  const [profilePics, setProfilePics] = useState([]);
+  const [incomingProfilePic, setIncomingProfilePic] = useState([])
+  useEffect(() => {
+    const fetchProfilePics = async () => {
+      if (searchResults.length > 0) {
+        const pics = await fetchMultipleProfilePic(searchResults);
+        setProfilePics(pics);
+      } else {
+        setProfilePics([]);
+      }
+
+      if (incomingRequests.length > 0) {
+        const incomingPic = await fetchMultipleProfilePic(incomingRequests);
+        setIncomingProfilePic(incomingPic)
+      } else {
+        setIncomingProfilePic([])
+      }
+    };
+    fetchProfilePics();
+  }, [searchResults,incomingRequests]);
+
+
+
+
+
+
+
+
   return (
     <div>
       <h1 className='left-shift'>Add a Friend</h1>
@@ -125,7 +162,13 @@ function AddFriend() {
       <ul className='friend_list'>
         {searchResults.map((user, index) => (
           <li key={index} className='users_item'>
+
+            {profilePics[index] && profilePics[index].profilePic!==null && (
+              <img src={`data:image/jpeg;base64,${profilePics[index].profilePic}`} alt={`${user}'s profile`} className='profilePic' />
+            )}
             <span className='friendname'> {user} </span>
+
+
             {friendlist.includes(user)
             ? (<button disabled className='disabled_button'>Friend</button>)
             : incomingRequests.includes(user) || outcomingRequests.includes(user)
@@ -139,6 +182,9 @@ function AddFriend() {
       <ul className='friend_list'>
         {incomingRequests.map((user, index) => (
           <li key={index} className='users_item'>
+            {incomingProfilePic[index] && incomingProfilePic[index].profilePic!==null && (
+              <img src={`data:image/jpeg;base64,${incomingProfilePic[index].profilePic}`} alt={`${user}'s profile`} className='profilePic' />
+            )}
             <span className='friendname'> {user} </span>
             <button onClick={() => handleAcceptFriend(user)} className='right-shift'>Accept</button>
             <button onClick={()=> handleDeclineFriend(user)}className='right-shift'>Decline</button>

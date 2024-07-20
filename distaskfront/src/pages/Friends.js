@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; //some popular js library i found that is needed :O
 import './Friends.css'
+import fetchMultipleProfilePic from '../components/FetchMultipleProfilePic';
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -23,6 +24,23 @@ const Friends = () => {
     fetchfriendlist();
   }, []);
 
+  const[friendsPic,setFriendsPic] = useState([])
+  useEffect(()=>{
+    const fetchProfilePics = async () => {
+      if (friends.length > 0) {
+        const pics = await fetchMultipleProfilePic(friends);
+        
+        setFriendsPic(pics);
+      } else {
+        setFriendsPic([]);
+      }
+    }
+    fetchProfilePics();
+  },[friends])
+
+  useEffect(()=>{
+    console.log(friendsPic)
+  },[friendsPic])
     
 
   return (
@@ -30,7 +48,20 @@ const Friends = () => {
       <h1 className='left-shift'>Friends List</h1>
       <ul className='friend_list'>
         {friends.map((user,index) => (
-          <li key={index} className='users_item'>{user}</li>
+          
+
+          
+          <li key={index} className='users_item'>
+            <div>
+              {friendsPic[index] && friendsPic[index].friendsPic!==null && (
+                <img src={`data:image/jpeg;base64,${friendsPic[index].profilePic}`} alt={`${user}'s profile`} className='profilePic' />
+              )}
+              
+              {user}
+
+            </div>
+            
+          </li>
         ))}
       </ul>
     </div>

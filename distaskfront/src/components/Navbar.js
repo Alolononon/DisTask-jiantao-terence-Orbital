@@ -1,6 +1,6 @@
 //Navbar.js
 import {React, useEffect,useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useFetcher, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import axios from 'axios';
 
@@ -55,7 +55,7 @@ import axios from 'axios';
   };
 
   const username = sessionStorage.getItem('username')
-  const [profilePic,setProfilePic] = useState({})
+  const [profilePic,setProfilePic] = useState(null)
   useEffect(()=>{
     const fetchProfilePic = async () => {
         try{
@@ -63,18 +63,26 @@ import axios from 'axios';
             formData.append('username',username)
             formData.append('action',"fetchProfilePhoto")
             const response = await axios.post('/profile', formData, {
-                responseType: 'blob', 
+                responseType: 'json', 
             });
-
-            const imageUrl = URL.createObjectURL(response.data);
-            setProfilePic(imageUrl)
+              
+            if (response.data.profilePic!==null) {
+              // Decode base64 string
+              const binaryData = new Uint8Array(response.data.profilePic.data);
+              const base64String = btoa(String.fromCharCode(...binaryData));
+              const imageUrl = `data:image/jpeg;base64,${base64String}`;
+              setProfilePic(imageUrl);
+            } else {
+              setProfilePic(null)
+            }
         }catch(err){
             console.error('error fetching phrofile piture: ', err)
         }
     }
-    fetchProfilePic();
-},[])
-
+    if(loggedin){
+      fetchProfilePic();
+    }
+},[loggedin,username])
 
 
 
@@ -92,10 +100,16 @@ import axios from 'axios';
               <li><p className="username">{sessionStorage.getItem('username')}</p></li>
               <li><button onClick={handleLogout} className="logoutButton">Logout</button></li>
               <li className="dropdown">
-                  {profilePic 
+                  {/* {profilePic
                     ? <img src={profilePic} alt="Profile" className="settings-icon" />
                     : <img src="/settings.png" alt="Settings" className="settings-icon" />
-                  }
+                  } */}
+
+                <img 
+                  src={profilePic || "/settings.png"} 
+                  alt="Profile" 
+                  className="settings-icon" 
+                />
                   
                   <div className="dropdown-content">
                     <a href="#!" onClick={() => getsettings("Profile")}>Profile</a>
