@@ -24,15 +24,14 @@ const Friends = () => {
     fetchfriendlist();
   }, []);
 
-  const[friendsPic,setFriendsPic] = useState([])
+  const[friendsPic,setFriendsPic] = useState({})
   useEffect(()=>{
     const fetchProfilePics = async () => {
       if (friends.length > 0) {
         const pics = await fetchMultipleProfilePic(friends);
-        
         setFriendsPic(pics);
       } else {
-        setFriendsPic([]);
+        setFriendsPic({});
       }
     }
     fetchProfilePics();
@@ -53,8 +52,8 @@ const Friends = () => {
           
           <li key={index} className='users_item'>
             <div>
-              {friendsPic[index] && friendsPic[index].friendsPic!==null && (
-                <img src={`data:image/jpeg;base64,${friendsPic[index].profilePic}`} alt={`${user}'s profile`} className='profilePic' />
+              {friendsPic[user] && friendsPic[user]!==null && (
+                <img src={`data:image/jpeg;base64,${friendsPic[user]}`} alt={`${user}'s profile`} className='profilePic' />
               )}
               
               {user}

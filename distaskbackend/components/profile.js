@@ -97,10 +97,16 @@ const profile = (req, res) => {
                     return res.status(500).json({ error: err.message });
                 }
 
-                const profilePics = results.map(result => ({
-                    username: result.username,
-                    profilePic: result.profilePic ? Buffer.from(result.profilePic).toString('base64') : null
-                }));
+                // const profilePics = results.map(result => ({
+                //     username: result.username,
+                //     profilePic: result.profilePic ? Buffer.from(result.profilePic).toString('base64') : null
+                // }));
+                const profilePics = {};
+                results.forEach(result => {
+                    profilePics[result.username] = result.profilePic ? Buffer.from(result.profilePic).toString('base64') : null;
+                });
+        
+
                 console.log(profilePics)
                 
                 res.json({ profilePics });

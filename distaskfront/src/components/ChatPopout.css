@@ -11,3 +11,10 @@
 .sendChatbutton{
     padding: 3px;
 }
+
+.messageprofilePic{
+    width: 30px;  
+    height: 30px; 
+    border: 1px solid #ccc;
+    margin: 0 5px;
+}

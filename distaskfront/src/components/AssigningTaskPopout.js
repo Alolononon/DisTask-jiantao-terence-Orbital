@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Popout.css"
 import "./AssigningTaskPopout.css"
 import axios from "axios";
+import fetchMultipleProfilePic from '../components/FetchMultipleProfilePic';
 
 function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
     const [refresh,setRefresh] = useState(false)
@@ -13,7 +14,6 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
     const [taskAssignedPpl, setTaskAssignedPpl] = useState([])
     const [notTaskAssignedPpl, setNotTaskAssignedPpl] = useState([])
     const [taskAssignedtoYOU, setTaskAssignedtoYOU] = useState(false)
-
 
     //FETCHING DATA=======================================================
     useEffect( ()=> {
@@ -86,6 +86,82 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
         }
     }
 
+
+    // for putting profile picture
+    const [taskParticipantsProfilePics,setTaskParicipantsProfilePics] = useState({})
+    const [notTaskParticipantsProfilePics, setNotTaskParticipantsProfilePics] = useState({})
+    const [taskAssignedPplProfilePics, settaskAssignedPplProfilePics] = useState({})
+    const [notTaskAssignedPplProfilePic, setnotTaskAssignedPplProfilePics] = useState({})
+    const [AllParticiapntsProfilePic, setALlParticipantsProfilePic] = useState({})
+    useEffect(()=>{
+        const fetchProfilePics = async () => {
+            // //for task participants
+            // if (taskParticipants.length > 0) {
+            //   const pics = await fetchMultipleProfilePic(taskParticipants);
+            //   setTaskParicipantsProfilePics(pics);
+            // } else {
+            //     setTaskParicipantsProfilePics({});
+            // }
+
+            // // for notTaskParticipants
+            // if (notTaskParticipants.length > 0) {
+            //     const pics = await fetchMultipleProfilePic(notTaskParticipants);
+            //     setNotTaskParticipantsProfilePics(pics);
+            // } else {
+            //     setNotTaskParticipantsProfilePics({});
+            // }
+            
+            // // for taskAssignedPpl
+            // if (taskAssignedPpl.length > 0) {
+            //     const pics = await fetchMultipleProfilePic(taskAssignedPpl);
+            //     settaskAssignedPplProfilePics(pics);
+            // } else {
+            //     settaskAssignedPplProfilePics({});
+            // }
+
+            // // for notTaskAssignedPpl
+            // if (notTaskAssignedPpl.length > 0) {
+            //     const pics = await fetchMultipleProfilePic(notTaskAssignedPpl);
+            //     setnotTaskAssignedPplProfilePics(pics);
+            // } else {
+            //     setnotTaskAssignedPplProfilePics({});
+            // }
+
+
+
+            const allParticipants = [
+                ...new Set([
+                    ...taskParticipants,
+                    ...notTaskParticipants,
+                    ...taskAssignedPpl,
+                    ...notTaskAssignedPpl
+                ])
+            ];
+
+            if (allParticipants.length > 0){
+                const pics = await fetchMultipleProfilePic(allParticipants);
+                setALlParticipantsProfilePic(pics)
+            } else {
+                setALlParticipantsProfilePic({})
+            }
+    
+
+
+
+
+
+        };
+          fetchProfilePics();
+    },[taskParticipants, notTaskParticipants, currentSection, taskAssignedPpl, notTaskAssignedPpl])
+
+
+    useEffect(()=>{
+
+    },[])
+
+
+
+
     return(
         <div className="popout">
 
@@ -115,6 +191,9 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
                             {taskParticipants.map((participant, index) => (
                                 <li key={index} className="participant-item">
                                 <div className="participant-info">
+                                    {AllParticiapntsProfilePic[participant] && AllParticiapntsProfilePic[participant]!==null && (
+                                        <img src={`data:image/jpeg;base64,${AllParticiapntsProfilePic[participant]}`} alt={`${participant}'s profile`} className='profilePic' />
+                                    )}
                                     <span className="participant-name">{participant}</span>
                                     <div className="action-container">
                                     {participant === creator 
@@ -153,6 +232,9 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
                             {notTaskParticipants.map((participant, index) => (
                                 <li key={index} className="participant-item">
                                 <div className="participant-info">
+                                    {AllParticiapntsProfilePic[participant] && AllParticiapntsProfilePic[participant]!==null && (
+                                        <img src={`data:image/jpeg;base64,${AllParticiapntsProfilePic[participant]}`} alt={`${participant}'s profile`} className='profilePic' />
+                                    )}
                                     <span className="participant-name">{participant}</span>
                                     <div className="action-container">
                                     <button onClick={() => handleAddPeopleInTask(participant)} className="action-button">
@@ -176,6 +258,9 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
                             {taskAssignedPpl.map((participant,index) => (
                                 <li key={index} className="participant-item">
                                     <div className="participant-info">
+                                        {AllParticiapntsProfilePic[participant] && AllParticiapntsProfilePic[participant]!==null && (
+                                            <img src={`data:image/jpeg;base64,${AllParticiapntsProfilePic[participant]}`} alt={`${participant}'s profile`} className='profilePic' />
+                                        )}
                                         <span className="participant-name">{participant}</span>
                                         <div className="action-container">
                                             <button onClick={()=>handleRemoveAssignPeopleInTask(participant)} className="action-button">
@@ -194,6 +279,9 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
                             {notTaskAssignedPpl.map((participant,index) => (
                                 <li key={index} className="participant-item">
                                     <div className="participant-info">
+                                        {AllParticiapntsProfilePic[participant] && AllParticiapntsProfilePic[participant]!==null && (
+                                            <img src={`data:image/jpeg;base64,${AllParticiapntsProfilePic[participant]}`} alt={`${participant}'s profile`} className='profilePic' />
+                                        )}
                                         <span className="participant-name">{participant}</span>
                                         <div className="action-container">
                                             <button onClick={()=> handleAssignPeopleInTask(participant)} className="action-button">
