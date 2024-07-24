@@ -44,13 +44,12 @@ function AssigningTaskPopout ({onClose, taskid, creator, onRefresh}) {
     //data processing refresh
     useEffect(()=> {
         setNotTaskParticipants(friendList.filter(friend => !taskParticipants.includes(friend)) )
-        let friendlistWUser = [username, ...friendList];
-        setNotTaskAssignedPpl(friendlistWUser.filter(friend => !taskAssignedPpl.includes(friend)) )
+        setNotTaskAssignedPpl(taskParticipants.filter(friend => !taskAssignedPpl.includes(friend)) )
 
         setTaskAssignedtoYOU(taskAssignedPpl.includes(username))
         console.log("task assigned to you:" + taskAssignedtoYOU)
         onRefresh();
-    },[friendList, taskParticipants,refresh, taskAssignedPpl])
+    },[friendList, taskParticipants, refresh, taskAssignedPpl])
 
 
 
