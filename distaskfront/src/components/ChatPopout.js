@@ -3,11 +3,12 @@ import "./Popout.css"
 import "./ChatPopout.css"
 import io from 'socket.io-client'
 import axios from "axios";
+import fetchMultipleProfilePic from '../components/FetchMultipleProfilePic';
 
-const socket = io.connect("http://localhost:5000")
-
+const socket = io.connect("http://localhost:5000") 
 
 function ChatPopout ({onClose, taskid, username}) {
+
     const [message,setMessage] = useState("")
     const [messageReceived, setMessageReceived] = useState([])
 
@@ -126,6 +127,25 @@ function ChatPopout ({onClose, taskid, username}) {
     };
 
 
+
+    const [allMembersProfilePics, setAllMembersProfilePics] = useState({})
+    useEffect(()=>{
+        const fetchProfilePic = async () => {
+            const allAuthors = messageReceived.map(msg => msg.Author);
+            const uniqueAuthors = [...new Set(allAuthors)]
+            if (uniqueAuthors.length > 0){
+                const pics = await fetchMultipleProfilePic(uniqueAuthors);
+                setAllMembersProfilePics(pics)
+            } else {
+                setAllMembersProfilePics({})
+            }
+
+        }
+        fetchProfilePic()
+    },[messageReceived])
+
+
+
     
 
     return(
@@ -142,7 +162,11 @@ function ChatPopout ({onClose, taskid, username}) {
             <div className="chatbox" ref={chatboxRef} onScroll={handleScroll}>
                 {messageReceived.map((msg) => (
                     <div key={msg.id}>
-                        <strong>{msg.Author}: </strong>{msg.Message}
+                        {allMembersProfilePics[msg.Author] && allMembersProfilePics[msg.Author]!==null && (
+                            <img src={`data:image/jpeg;base64,${allMembersProfilePics[msg.Author]}`} alt={`${msg.Author}'s profile`} className='messageprofilePic' />
+                        )}
+                        <strong>{msg.Author}: </strong>
+                        {msg.Message}
                     </div>
                 ))}
             </div>

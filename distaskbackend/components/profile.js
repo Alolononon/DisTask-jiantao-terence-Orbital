@@ -28,7 +28,7 @@ const upload = multer({storage: storage});
 
 //     })
 // }
-
+ 
 
 const profile = (req, res) => {
 
@@ -56,11 +56,10 @@ const profile = (req, res) => {
                 }
             });
             
-        }
+        } 
             
             
         else if(action === "fetchProfilePhoto"){
-            console.log('here')
             if(err){
                 return res.status(500).json({error: 'error fetching profile picture'})
             }
@@ -75,10 +74,8 @@ const profile = (req, res) => {
                 }
                 if (result.length > 0 && result[0].profilePic) {
                     const profilePic = result[0].profilePic;
-                    
-                    const imgBuffer = Buffer.from(profilePic, 'base64'); // Assuming profilePic is stored as base64 in the database
-                    res.setHeader('Content-Type', 'image/jpeg'); // Adjust the content type if your images are not JPEGs
-                    res.send(imgBuffer);
+                    // Send the image as base64-encoded string in JSON
+                    res.json({ profilePic });
                 } else {
                     console.log('pic not found')
                     res.json(null);

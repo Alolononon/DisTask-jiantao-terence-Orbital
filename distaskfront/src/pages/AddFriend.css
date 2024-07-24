@@ -33,3 +33,9 @@
     margin-left: 10px;
 }
 
+.profilePic{
+    width: 40px;  
+    height: 40px; 
+    border: 1px solid #ccc;
+    margin: 0 5px;
+}

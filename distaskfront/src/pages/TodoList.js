@@ -393,7 +393,7 @@ const TodoList = ({ userId }) => {
                           {/* POPOUT Assigning Task to friend */}
                           <div>
                             <button onClick={()=> toggleAssignTaskPopOut(todo.id)} className='toggleAssignTaskPopOut' >
-                              <FontAwesomeIcon size="" icon={faUsers} />
+                              <FontAwesomeIcon  icon={faUsers} />
                             </button>
                             {AssignTaskPopoutstate[todo.id] && 
                               (<AssigningTaskPopout onClose={()=> toggleAssignTaskPopOut(todo.id)} taskid={todo.id} creator={todo.username} onRefresh={()=>setRefresh(!refresh)}/>)
